@@ -72,6 +72,11 @@ header p{font-size:11px;color:var(--text2);letter-spacing:.04em}
 .style-btn:hover{border-color:#555;color:var(--text);}
 .style-btn.on{background:var(--red);color:#fff;border-color:var(--red);}
 .line-color-swatch{width:28px;height:28px;border-radius:5px;border:1px solid var(--border);cursor:pointer;flex-shrink:0;}
+.fx-row{display:flex;gap:5px;align-items:center;margin-top:5px;flex-wrap:wrap;}
+.fx-btn{padding:3px 9px;border-radius:4px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:10px;font-weight:700;cursor:pointer;transition:all .12s;white-space:nowrap;}
+.fx-btn:hover{border-color:#555;color:var(--text);}
+.fx-btn.on{background:var(--red);color:#fff;border-color:var(--red);}
+.fx-color{width:22px;height:22px;border-radius:4px;border:1px solid var(--border);cursor:pointer;flex-shrink:0;vertical-align:middle;}
 .input-row input::placeholder{color:#444}
 .gen-btn{padding:11px 22px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s,transform .1s}
 .gen-btn:hover{background:var(--red2)}
@@ -511,7 +516,8 @@ const TEXT_COLORS = [
 let selColor = '#ffffff', selAlign = 'center', selLineSpacing = 1.12, selLetterSpacing = 0;
 const DEF_SIZE = 130;
 // Per-line data: [{text, fontIdx}]
-let lineData = [{text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false}, {text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false}];
+let lineData = [{text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, highlight:false, hlColor:'#ffff00', outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3},
+                {text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, highlight:false, hlColor:'#ffff00', outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3}];
 let filteredFonts = [...FONTS];
 
 function buildColors() {
@@ -582,11 +588,25 @@ function buildLineEditor() {
     row1.appendChild(sel);
     row1.appendChild(sizeInput);
 
-    // ── Row 2: color swatch + B I U toggles ──
+    // helper: make color mini-picker
+    function mkColorPick(initVal, onchange) {
+      const wrap = document.createElement('label');
+      wrap.style.cssText = 'position:relative;cursor:pointer;display:inline-flex;';
+      const swatch = document.createElement('div');
+      swatch.className = 'fx-color';
+      swatch.style.background = initVal;
+      const picker = document.createElement('input');
+      picker.type = 'color'; picker.value = initVal;
+      picker.style.cssText = 'position:absolute;width:0;height:0;opacity:0;';
+      picker.oninput = function(){ swatch.style.background = this.value; onchange(this.value); };
+      wrap.appendChild(swatch); wrap.appendChild(picker);
+      return wrap;
+    }
+
+    // ── Row 2: Text color + B I U ──────────────────────────────────
     const row2 = document.createElement('div');
     row2.className = 'line-style-row';
 
-    // Color swatch (opens native color picker)
     const colorWrap = document.createElement('label');
     colorWrap.title = 'Text color';
     colorWrap.style.cssText = 'position:relative;cursor:pointer;';
@@ -595,58 +615,85 @@ function buildLineEditor() {
     colorSwatch.style.background = ld.color || '#ffffff';
     colorSwatch.style.boxShadow = (ld.color === '#ffffff' || !ld.color) ? 'inset 0 0 0 1px #444' : 'none';
     const colorPicker = document.createElement('input');
-    colorPicker.type = 'color';
-    colorPicker.value = ld.color || '#ffffff';
+    colorPicker.type = 'color'; colorPicker.value = ld.color || '#ffffff';
     colorPicker.style.cssText = 'position:absolute;width:0;height:0;opacity:0;';
-    colorPicker.oninput = (function(idx, swatch){ return function(){ lineData[idx].color = this.value; swatch.style.background = this.value; swatch.style.boxShadow='none'; regen(); }; })(i, colorSwatch);
-    colorWrap.appendChild(colorSwatch);
-    colorWrap.appendChild(colorPicker);
+    colorPicker.oninput = (function(idx, sw){ return function(){ lineData[idx].color=this.value; sw.style.background=this.value; sw.style.boxShadow='none'; regen(); }; })(i, colorSwatch);
+    colorWrap.appendChild(colorSwatch); colorWrap.appendChild(colorPicker);
 
-    // B button
     const btnB = document.createElement('button');
-    btnB.className = 'style-btn' + (ld.bold ? ' on' : '');
-    btnB.title = 'Bold';
-    btnB.innerHTML = '<b>B</b>';
-    btnB.onclick = (function(idx, btn){ return function(){ lineData[idx].bold = !lineData[idx].bold; btn.classList.toggle('on'); regen(); }; })(i, btnB);
+    btnB.className = 'style-btn'+(ld.bold?' on':''); btnB.title='Bold'; btnB.innerHTML='<b>B</b>';
+    btnB.onclick=(function(idx,btn){return function(){lineData[idx].bold=!lineData[idx].bold;btn.classList.toggle('on');regen();};})(i,btnB);
 
-    // I button
     const btnI = document.createElement('button');
-    btnI.className = 'style-btn' + (ld.italic ? ' on' : '');
-    btnI.title = 'Italic';
-    btnI.innerHTML = '<i>I</i>';
-    btnI.onclick = (function(idx, btn){ return function(){ lineData[idx].italic = !lineData[idx].italic; btn.classList.toggle('on'); regen(); }; })(i, btnI);
+    btnI.className = 'style-btn'+(ld.italic?' on':''); btnI.title='Italic'; btnI.innerHTML='<i>I</i>';
+    btnI.onclick=(function(idx,btn){return function(){lineData[idx].italic=!lineData[idx].italic;btn.classList.toggle('on');regen();};})(i,btnI);
 
-    // U button
     const btnU = document.createElement('button');
-    btnU.className = 'style-btn' + (ld.underline ? ' on' : '');
-    btnU.title = 'Underline';
-    btnU.innerHTML = '<u>U</u>';
-    btnU.onclick = (function(idx, btn){ return function(){ lineData[idx].underline = !lineData[idx].underline; btn.classList.toggle('on'); regen(); }; })(i, btnU);
+    btnU.className = 'style-btn'+(ld.underline?' on':''); btnU.title='Underline'; btnU.innerHTML='<u>U</u>';
+    btnU.onclick=(function(idx,btn){return function(){lineData[idx].underline=!lineData[idx].underline;btn.classList.toggle('on');regen();};})(i,btnU);
 
-    const colorLabel = document.createElement('span');
-    colorLabel.style.cssText = 'font-size:10px;color:var(--text2);margin-left:2px;';
-    colorLabel.textContent = 'color';
+    const lbl1 = document.createElement('span');
+    lbl1.style.cssText='font-size:10px;color:var(--text2);margin-left:2px;'; lbl1.textContent='color';
+    const lbl2 = document.createElement('span');
+    lbl2.style.cssText='font-size:10px;color:var(--text2);margin-left:4px;'; lbl2.textContent='style';
 
-    const styleLabel = document.createElement('span');
-    styleLabel.style.cssText = 'font-size:10px;color:var(--text2);margin-left:6px;';
-    styleLabel.textContent = 'style';
+    row2.appendChild(colorWrap); row2.appendChild(lbl1);
+    row2.appendChild(btnB); row2.appendChild(btnI); row2.appendChild(btnU);
+    row2.appendChild(lbl2);
 
-    row2.appendChild(colorWrap);
-    row2.appendChild(colorLabel);
-    row2.appendChild(btnB);
-    row2.appendChild(btnI);
-    row2.appendChild(btnU);
-    row2.appendChild(styleLabel);
+    // ── Row 3: Effects — Highlight, Outline, Stroke, 3D, Glow ──────
+    const row3 = document.createElement('div');
+    row3.className = 'fx-row';
+
+    // Highlight
+    const btnHL = document.createElement('button');
+    btnHL.className='fx-btn'+(ld.highlight?' on':''); btnHL.textContent='🟡 Highlight';
+    const hlPick = mkColorPick(ld.hlColor||'#ffff00', (function(idx){return function(v){lineData[idx].hlColor=v;regen();};})(i));
+    btnHL.onclick=(function(idx,btn){return function(){lineData[idx].highlight=!lineData[idx].highlight;btn.classList.toggle('on');regen();};})(i,btnHL);
+
+    // Outline
+    const btnOL = document.createElement('button');
+    btnOL.className='fx-btn'+(ld.outline?' on':''); btnOL.textContent='◻ Outline';
+    const olPick = mkColorPick(ld.outColor||'#000000', (function(idx){return function(v){lineData[idx].outColor=v;regen();};})(i));
+    btnOL.onclick=(function(idx,btn){return function(){lineData[idx].outline=!lineData[idx].outline;btn.classList.toggle('on');regen();};})(i,btnOL);
+
+    // Stroke
+    const btnST = document.createElement('button');
+    btnST.className='fx-btn'+(ld.stroke?' on':''); btnST.textContent='✏ Stroke';
+    const stPick = mkColorPick(ld.strokeColor||'#000000', (function(idx){return function(v){lineData[idx].strokeColor=v;regen();};})(i));
+    btnST.onclick=(function(idx,btn){return function(){lineData[idx].stroke=!lineData[idx].stroke;btn.classList.toggle('on');regen();};})(i,btnST);
+
+    // 3D Shadow
+    const btn3D = document.createElement('button');
+    btn3D.className='fx-btn'+(ld.shadow3d?' on':''); btn3D.textContent='🎲 3D';
+    btn3D.onclick=(function(idx,btn){return function(){lineData[idx].shadow3d=!lineData[idx].shadow3d;btn.classList.toggle('on');regen();};})(i,btn3D);
+
+    // Glow
+    const btnGW = document.createElement('button');
+    btnGW.className='fx-btn'+(ld.glow?' on':''); btnGW.textContent='✨ Glow';
+    btn3D.onclick=(function(idx,btn){return function(){lineData[idx].shadow3d=!lineData[idx].shadow3d;btn.classList.toggle('on');regen();};})(i,btn3D);
+    btnGW.onclick=(function(idx,btn){return function(){lineData[idx].glow=!lineData[idx].glow;btn.classList.toggle('on');regen();};})(i,btnGW);
+
+    const fxLabel = document.createElement('span');
+    fxLabel.style.cssText='font-size:10px;color:var(--text2);'; fxLabel.textContent='fx';
+
+    row3.appendChild(fxLabel);
+    row3.appendChild(btnHL); row3.appendChild(hlPick);
+    row3.appendChild(btnOL); row3.appendChild(olPick);
+    row3.appendChild(btnST); row3.appendChild(stPick);
+    row3.appendChild(btn3D);
+    row3.appendChild(btnGW);
 
     card.appendChild(row1);
     card.appendChild(row2);
+    card.appendChild(row3);
     wrap.appendChild(card);
   });
 }
 
 function addLine() {
   if (lineData.length >= 6) return;
-  lineData.push({text:'', fontIdx:0, fontSize:DEF_SIZE, color:selColor, bold:false, italic:false, underline:false});
+  lineData.push({text:'', fontIdx:0, fontSize:DEF_SIZE, color:selColor, bold:false, italic:false, underline:false, highlight:false, hlColor:'#ffff00', outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3});
   buildLineEditor(); regen();
 }
 
@@ -698,7 +745,7 @@ function drawThumbnailMultiFont() {
 
   visibleLines.forEach((ld, i) => {
     const fs = ld.fontSize || selSize;
-    const fontFamily = FONTS[ld.fontIdx] ? FONTS[ld.fontIdx].f : FONTS[selFont].f;
+    const fontFamily = FONTS[ld.fontIdx] ? FONTS[ld.fontIdx].f : FONTS[0].f;
     const weight = ld.bold ? 'bold' : 'normal';
     const style = ld.italic ? 'italic' : 'normal';
     ctx.font = style + ' ' + weight + ' ' + fs + 'px ' + fontFamily;
