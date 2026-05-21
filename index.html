@@ -3,261 +3,160 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>YouTube Thumbnail Generator — Free</title>
+<title>ThumbCraft — Free YouTube Thumbnail Generator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&family=Oswald:wght@700&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400;700;900&family=Anton:wght@400;700;900&family=Oswald:wght@400;700;900&family=Archivo+Black:wght@400;700;900&family=Black+Han+Sans:wght@400;700;900&family=Teko:wght@400;700;900&family=Russo+One:wght@400;700;900&family=Squada+One:wght@400;700;900&family=Rajdhani:wght@400;700;900&family=Fjalla+One:wght@400;700;900&family=Racing+Sans+One:wght@400;700;900&family=Kanit:wght@400;700;900&family=Dela+Gothic+One:wght@400;700;900&family=Unbounded:wght@400;700;900&family=Exo+2:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Iceland:wght@400;700;900&family=Tourney:wght@400;700;900&family=Graduate:wght@400;700;900&family=Wallpoet:wght@400;700;900&family=Barlow+Condensed:wght@400;700;900&family=Big+Shoulders+Display:wght@400;700;900&family=Chakra+Petch:wght@400;700;900&family=Changa:wght@400;700;900&family=Chivo:wght@400;700;900&family=Crimson+Pro:wght@400;700;900&family=DM+Sans:wght@400;700;900&family=Encode+Sans+Condensed:wght@400;700;900&family=Expletus+Sans:wght@400;700;900&family=Faustina:wght@400;700;900&family=Francois+One:wght@400;700;900&family=Gruppo:wght@400;700;900&family=Gugi:wght@400;700;900&family=Hammersmith+One:wght@400;700;900&family=Hind:wght@400;700;900&family=Krona+One:wght@400;700;900&family=Lalezar:wght@400;700;900&family=League+Gothic:wght@400;700;900&family=Michroma:wght@400;700;900&family=Noto+Sans+Display:wght@400;700;900&family=Quantico:wght@400;700;900&family=Saira+Condensed:wght@400;700;900&family=Saira+Extra+Condensed:wght@400;700;900&family=Share+Tech:wght@400;700;900&family=Syne:wght@400;700;900&family=Titillium+Web:wght@400;700;900&family=Unica+One:wght@400;700;900&family=Work+Sans:wght@400;700;900&family=Yantramanav:wght@400;700;900&family=Zilla+Slab:wght@400;700;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=VT323:wght@400;700;900&family=Press+Start+2P:wght@400;700;900&family=Monoton:wght@400;700;900&family=Share+Tech+Mono:wght@400;700;900&family=Silkscreen:wght@400;700;900&family=DotGothic16:wght@400;700;900&family=Bungee:wght@400;700;900&family=Bungee+Shade:wght@400;700;900&family=Bungee+Inline:wght@400;700;900&family=Bungee+Outline:wght@400;700;900&family=Fugaz+One:wght@400;700;900&family=Righteous:wght@400;700;900&family=Rowdies:wght@400;700;900&family=Titan+One:wght@400;700;900&family=Sigmar:wght@400;700;900&family=Rampart+One:wght@400;700;900&family=Poetsen+One:wght@400;700;900&family=Londrina+Solid:wght@400;700;900&family=Lilita+One:wght@400;700;900&family=Luckiest+Guy:wght@400;700;900&family=Black+Ops+One:wght@400;700;900&family=Alfa+Slab+One:wght@400;700;900&family=Acme:wght@400;700;900&family=Alatsi:wght@400;700;900&family=Baloo+2:wght@400;700;900&family=Bowlby+One:wght@400;700;900&family=Fredoka:wght@400;700;900&family=Nunito:wght@400;700;900&family=Limelight:wght@400;700;900&family=Ultra:wght@400;700;900&family=Abril+Fatface:wght@400;700;900&family=Playfair+Display:wght@400;700;900&family=Cinzel:wght@400;700;900&family=Yeseva+One:wght@400;700;900&family=Dm+Serif+Display:wght@400;700;900&family=Cormorant:wght@400;700;900&family=Gloock:wght@400;700;900&family=Libre+Baskerville:wght@400;700;900&family=Merriweather:wght@400;700;900&family=Noto+Serif+Display:wght@400;700;900&family=Spectral:wght@400;700;900&family=Permanent+Marker:wght@400;700;900&family=Kalam:wght@400;700;900&family=Dancing+Script:wght@400;700;900&family=Nanum+Brush+Script:wght@400;700;900&family=Cabin+Sketch:wght@400;700;900&family=Special+Elite:wght@400;700;900&family=Patrick+Hand:wght@400;700;900&family=Handlee:wght@400;700;900&family=Gochi+Hand:wght@400;700;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Rock+Salt:wght@400;700;900&family=Caveat:wght@400;700;900&family=Indie+Flower:wght@400;700;900&family=Satisfy:wght@400;700;900&family=Great+Vibes:wght@400;700;900&family=Pacifico:wght@400;700;900&family=Lobster:wght@400;700;900&family=Lobster+Two:wght@400;700;900&family=Allura:wght@400;700;900&family=Sacramento:wght@400;700;900&family=Pinyon+Script:wght@400;700;900&family=Creepster:wght@400;700;900&family=Pirata+One:wght@400;700;900&family=MedievalSharp:wght@400;700;900&family=Butcherman:wght@400;700;900&family=Ewert:wght@400;700;900&family=Henny+Penny:wght@400;700;900&family=Jolly+Lodger:wght@400;700;900&family=Lacquer:wght@400;700;900&family=Metal+Mania:wght@400;700;900&family=Rubik+Burned:wght@400;700;900&family=Rubik+Dirt:wght@400;700;900&family=Rubik+Glitch:wght@400;700;900&family=Rubik+Moonrocks:wght@400;700;900&family=Rubik+Puddles:wght@400;700;900&family=Rubik+Spray+Paint:wght@400;700;900&family=Rubik+Storm:wght@400;700;900&family=Rubik+Vinyl:wght@400;700;900&family=Josefin+Sans:wght@400;700;900&family=Poiret+One:wght@400;700;900&family=Comfortaa:wght@400;700;900&family=Questrial:wght@400;700;900&family=Raleway:wght@400;700;900&family=Philosopher:wght@400;700;900&family=Tenor+Sans:wght@400;700;900&family=Marcellus:wght@400;700;900&family=Cardo:wght@400;700;900&family=Forum:wght@400;700;900&family=Cormorant+Garamond:wght@400;700;900&family=Bodoni+Moda:wght@400;700;900&family=Italiana:wght@400;700;900&family=Oranienbaum:wght@400;700;900&family=Baloo+Bhai+2:wght@400;700;900&family=Bubblegum+Sans:wght@400;700;900&family=Carter+One:wght@400;700;900&family=Chewy:wght@400;700;900&family=Frijole:wght@400;700;900&family=Jockey+One:wght@400;700;900&family=Leckerli+One:wght@400;700;900&family=Lemon:wght@400;700;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Margarine:wght@400;700;900&family=Modak:wght@400;700;900&family=Mountains+of+Christmas:wght@400;700;900&family=Shrikhand:wght@400;700;900&family=Sniglet:wght@400;700;900&family=Varela+Round:wght@400;700;900&family=Viga:wght@400;700;900&family=Wellfleet:wght@400;700;900&family=Yatra+One:wght@400;700;900&display=swap" rel="stylesheet" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d0d0d;--surface:#161616;--surface2:#1f1f1f;--border:#2a2a2a;--text:#f0f0f0;--text2:#888;--red:#e63946;--red2:#b52b36;--radius:10px}
+body{background:var(--bg);color:var(--text);font-family:Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 12px 80px}
+header{text-align:center;margin-bottom:24px}
+.logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo-icon{width:34px;height:34px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:18px;height:18px;fill:white}
+.logo-text{font-size:22px;font-weight:900;letter-spacing:1px}
+header p{font-size:11px;color:var(--text2);letter-spacing:.04em}
+.badge{display:inline-block;padding:2px 8px;background:#1a3a1a;color:#4caf50;border-radius:999px;font-size:10px;font-weight:700;margin-left:6px}
+.card{width:100%;max-width:960px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px}
+.flabel{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin-bottom:8px}
 
-  :root {
-    --bg: #0d0d0d;
-    --surface: #161616;
-    --surface2: #1f1f1f;
-    --border: #2a2a2a;
-    --text: #f0f0f0;
-    --text2: #999;
-    --red: #e63946;
-    --red-dark: #b52b36;
-    --accent: #ffd166;
-    --radius: 10px;
-  }
+/* Search */
+.search-wrap{position:relative;margin-bottom:10px}
+.search-wrap input{width:100%;padding:9px 14px 9px 36px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;outline:none;transition:border-color .2s}
+.search-wrap input:focus{border-color:var(--red)}
+.search-wrap input::placeholder{color:#444}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--text2);fill:none}
+.font-count-badge{font-size:11px;color:var(--text2);margin-bottom:8px}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Montserrat', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 16px 80px;
-  }
+/* Font grid */
+.font-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:7px;max-height:400px;overflow-y:auto;padding-right:4px;margin-bottom:20px}
+.font-grid::-webkit-scrollbar{width:4px}
+.font-grid::-webkit-scrollbar-track{background:var(--surface2)}
+.font-grid::-webkit-scrollbar-thumb{background:#444;border-radius:4px}
+.font-card{background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;overflow:hidden;cursor:pointer;transition:border-color .12s,transform .1s}
+.font-card:hover{border-color:#555;transform:translateY(-1px)}
+.font-card.active{border:2px solid var(--red);background:#1f1010}
+.font-preview{height:68px;background:#000;display:flex;align-items:center;justify-content:center;padding:6px}
+.font-preview span{color:#fff;font-size:24px;line-height:1.1;text-align:center;max-width:100%;overflow:hidden;white-space:nowrap}
+.font-card.active .font-preview span{color:var(--red)}
+.font-meta{padding:5px 9px;display:flex;flex-direction:column;gap:1px}
+.font-name{font-size:10px;color:var(--text);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.font-vibe{font-size:9px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.no-results{color:var(--text2);font-size:13px;padding:20px;text-align:center;grid-column:1/-1}
 
-  header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .logo-icon {
-    width: 40px; height: 40px;
-    background: var(--red);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .logo-icon svg { width: 22px; height: 22px; fill: white; }
-  .logo-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 1px;
-    color: var(--text);
-  }
-  header p {
-    font-size: 13px;
-    color: var(--text2);
-    letter-spacing: 0.04em;
-  }
+/* Controls */
+.controls-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.ctrl-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
+.color-swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.swatch{width:26px;height:26px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:border-color .12s,transform .1s}
+.swatch:hover{transform:scale(1.12)}
+.swatch.active{border-color:#fff}
+.custom-color{display:flex;align-items:center;gap:6px;margin-top:8px}
+.custom-color input[type=color]{width:30px;height:26px;border:none;border-radius:6px;cursor:pointer;background:none;padding:0}
+.custom-color span{font-size:11px;color:var(--text2)}
+.size-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sz-pill{padding:4px 11px;border-radius:999px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;cursor:pointer;transition:all .12s}
+.sz-pill:hover{border-color:#555;color:var(--text)}
+.sz-pill.active{background:var(--red);color:#fff;border-color:var(--red)}
 
-  .card {
-    width: 100%;
-    max-width: 760px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-  }
+/* BG */
+.bg-row{margin-bottom:18px}
+.bg-swatches{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.bg-swatch{width:32px;height:32px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border-color .12s,transform .1s}
+.bg-swatch:hover{transform:scale(1.1)}
+.bg-swatch.active{border-color:#fff}
 
-  .field-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text2);
-    margin-bottom: 8px;
-  }
+/* Input */
+.input-row{display:flex;gap:8px;margin-bottom:16px}
+.input-row input{flex:1;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;outline:none;transition:border-color .2s}
+.input-row input:focus{border-color:var(--red)}
+.input-row input::placeholder{color:#444}
+.gen-btn{padding:11px 22px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s,transform .1s}
+.gen-btn:hover{background:var(--red2)}
+.gen-btn:active{transform:scale(.97)}
 
-  .input-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .input-row input {
-    flex: 1;
-    padding: 12px 16px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .input-row input:focus { border-color: var(--red); }
-  .input-row input::placeholder { color: #555; }
+/* Canvas */
+.canvas-wrap{width:100%;aspect-ratio:16/9;border-radius:12px;border:1px solid var(--border);overflow:hidden;position:relative;margin-bottom:14px;background:#000}
+canvas{width:100%!important;height:100%!important;display:block}
+.ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#333;font-size:12px;pointer-events:none}
+.ph svg{width:40px;height:40px;opacity:.2}
 
-  .gen-btn {
-    padding: 12px 26px;
-    background: var(--red);
-    color: white;
-    border: none;
-    border-radius: var(--radius);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    transition: background 0.15s, transform 0.1s;
-    white-space: nowrap;
-  }
-  .gen-btn:hover { background: var(--red-dark); }
-  .gen-btn:active { transform: scale(0.97); }
-
-  .style-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 22px;
-  }
-  .pill {
-    padding: 6px 16px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text2);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-    transition: all 0.15s;
-    user-select: none;
-  }
-  .pill:hover { border-color: #555; color: var(--text); }
-  .pill.active { background: var(--red); color: white; border-color: var(--red); }
-
-  .canvas-wrap {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: #111;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 16px;
-  }
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
-    display: block;
-  }
-  .canvas-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    color: #444;
-    font-size: 13px;
-    pointer-events: none;
-  }
-  .canvas-placeholder svg { width: 48px; height: 48px; opacity: 0.3; }
-
-  .bottom-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .dl-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 18px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-  .dl-btn:hover { background: #2a2a2a; }
-  .dl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .dl-btn svg { width: 15px; height: 15px; }
-
-  .status {
-    flex: 1;
-    text-align: right;
-    font-size: 12px;
-    color: var(--text2);
-  }
-
-  .badge-free {
-    display: inline-block;
-    padding: 3px 10px;
-    background: #1a3a1a;
-    color: #4caf50;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    margin-left: 8px;
-  }
-
-  footer {
-    margin-top: 32px;
-    font-size: 12px;
-    color: #444;
-    text-align: center;
-  }
-  footer a { color: #666; text-decoration: none; }
-  footer a:hover { color: var(--text2); }
+/* Bottom */
+.bottom-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dl-btn{display:flex;align-items:center;gap:5px;padding:8px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;transition:background .15s}
+.dl-btn:hover{background:#2a2a2a}
+.dl-btn:disabled{opacity:.3;cursor:not-allowed}
+.dl-btn svg{width:13px;height:13px}
+.status{flex:1;text-align:right;font-size:11px;color:var(--text2)}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.1 2.8 12 2.8 12 2.8s-4.1 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.1.3 4.3.3 4.3s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.8 12 21.8 12 21.8s4.1 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.3v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg>
-    </div>
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.1 2.8 12 2.8 12 2.8s-4.1 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.1.3 4.3.3 4.3s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.8 12 21.8 12 21.8s4.1 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.3v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg></div>
     <span class="logo-text">ThumbCraft</span>
-    <span class="badge-free">100% FREE</span>
+    <span class="badge">100% FREE</span>
   </div>
-  <p>Generate stunning YouTube thumbnails — no account, no API key, no cost</p>
+  <p>No account · No API key · No cost · 160+ fonts</p>
 </header>
 
 <div class="card">
-  <div class="field-label">Choose a style</div>
-  <div class="style-row" id="pills">
-    <div class="pill active" data-style="cinematic">🎬 Cinematic</div>
-    <div class="pill" data-style="gaming">🎮 Gaming / Neon</div>
-    <div class="pill" data-style="minimal">✦ Minimal</div>
-    <div class="pill" data-style="dramatic">🔥 Dramatic Bold</div>
-    <div class="pill" data-style="tech">⚡ Tech / Futuristic</div>
-    <div class="pill" data-style="nature">🌿 Nature / Calm</div>
-    <div class="pill" data-style="finance">💰 Finance / Business</div>
-    <div class="pill" data-style="horror">💀 Dark / Horror</div>
+
+  <div class="flabel">choose font &nbsp;<span class="font-count-badge" id="fontCountLabel"></span></div>
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="fontSearch" placeholder="Search fonts… e.g. bold, retro, horror, script" oninput="filterFonts()" />
+  </div>
+  <div class="font-grid" id="fontGrid"></div>
+
+  <div class="bg-row">
+    <div class="flabel">background</div>
+    <div class="bg-swatches" id="bgSwatches"></div>
   </div>
 
-  <div class="field-label">Video title</div>
+  <div class="controls-row">
+    <div class="ctrl-box">
+      <div class="flabel">text color</div>
+      <div class="color-swatches" id="colorSwatches"></div>
+      <div class="custom-color">
+        <input type="color" id="customColor" value="#ffffff" oninput="setCustomColor(this.value)" />
+        <span>custom color</span>
+      </div>
+    </div>
+    <div class="ctrl-box">
+      <div class="flabel">font size</div>
+      <div class="size-row" id="sizeRow">
+        <div class="sz-pill" data-size="70">XS</div>
+        <div class="sz-pill" data-size="95">Small</div>
+        <div class="sz-pill active" data-size="130">Medium</div>
+        <div class="sz-pill" data-size="165">Large</div>
+        <div class="sz-pill" data-size="200">XL</div>
+        <div class="sz-pill" data-size="240">XXL</div>
+      </div>
+      <div class="flabel" style="margin-top:13px">alignment</div>
+      <div class="size-row" id="alignRow">
+        <div class="sz-pill active" data-align="center">Center</div>
+        <div class="sz-pill" data-align="left">Left</div>
+        <div class="sz-pill" data-align="right">Right</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flabel">video title</div>
   <div class="input-row">
-    <input id="titleInput" type="text" placeholder="e.g.  Top 10 Life Hacks That Changed My Life" maxlength="90" />
+    <input id="titleInput" type="text" placeholder="e.g.  10 Life Hacks That Changed Everything" maxlength="90" />
     <button class="gen-btn" onclick="generate()">Generate</button>
   </div>
 
   <div class="canvas-wrap">
     <canvas id="c" width="1280" height="720"></canvas>
-    <div class="canvas-placeholder" id="ph">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-      Your thumbnail preview will appear here
+    <div class="ph" id="ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      Pick a font, enter a title, hit Generate
     </div>
   </div>
 
@@ -270,389 +169,342 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
       Copy Image
     </button>
-    <span class="status" id="status">1280 × 720 px · ready</span>
+    <span class="status" id="status">1280 × 720 px</span>
   </div>
 </div>
 
-<footer>
-  Built with ❤ · No AI API · No server · Pure browser · <a href="https://github.com" target="_blank">Deploy free on GitHub Pages</a>
-</footer>
-
 <script>
-// ─── Style Definitions ───────────────────────────────────────────────
-const STYLES = {
-  cinematic: {
-    bgColors: ['#0a0a1a','#1a1030','#0d1a2a'],
-    accent: '#e8c46a',
-    text: '#ffffff',
-    shadow: '#000000',
-    pattern: 'diagonal',
-    overlays: [{shape:'circle',x:0.85,y:0.15,r:0.55,color:'#3a2060',alpha:0.45},{shape:'circle',x:0.1,y:0.85,r:0.3,color:'#1a3060',alpha:0.3}],
-    font: "'Bebas Neue', Impact, sans-serif",
-    subFont: "'Oswald', sans-serif",
-    layout: 'center',
-    accentBar: true,
-    vignette: true,
-  },
-  gaming: {
-    bgColors: ['#050510','#0d0520','#150530'],
-    accent: '#00ffe7',
-    text: '#ffffff',
-    shadow: '#00ffe7',
-    pattern: 'grid',
-    overlays: [{shape:'circle',x:0.8,y:0.5,r:0.7,color:'#7b00ff',alpha:0.25},{shape:'circle',x:0.2,y:0.5,r:0.5,color:'#ff0080',alpha:0.15}],
-    font: "'Bebas Neue', Impact, sans-serif",
-    subFont: "'Oswald', sans-serif",
-    layout: 'left',
-    neonGlow: true,
-    vignette: false,
-  },
-  minimal: {
-    bgColors: ['#f8f5f0','#f0ece6','#e8e4de'],
-    accent: '#c0392b',
-    text: '#1a1a1a',
-    shadow: 'rgba(0,0,0,0.1)',
-    pattern: 'none',
-    overlays: [{shape:'rect',x:0,y:0.75,w:1,h:0.06,color:'#1a1a1a',alpha:1}],
-    font: "'Oswald', Impact, sans-serif",
-    subFont: "'Montserrat', sans-serif",
-    layout: 'left',
-    accentBar: false,
-    vignette: false,
-    darkText: true,
-  },
-  dramatic: {
-    bgColors: ['#1a0000','#3a0808','#200000'],
-    accent: '#ff4500',
-    text: '#ffffff',
-    shadow: '#ff0000',
-    pattern: 'burst',
-    overlays: [{shape:'circle',x:0.5,y:0.5,r:1.2,color:'#ff2200',alpha:0.08}],
-    font: "'Bebas Neue', Impact, sans-serif",
-    subFont: "'Oswald', sans-serif",
-    layout: 'center',
-    neonGlow: false,
-    vignette: true,
-    accentBar: true,
-  },
-  tech: {
-    bgColors: ['#020810','#051020','#030c18'],
-    accent: '#00d4ff',
-    text: '#ffffff',
-    shadow: '#003a5a',
-    pattern: 'circuit',
-    overlays: [{shape:'rect',x:0.5,y:0,w:0.5,h:1,color:'#00d4ff',alpha:0.03}],
-    font: "'Oswald', 'Bebas Neue', Impact, sans-serif",
-    subFont: "'Montserrat', sans-serif",
-    layout: 'left',
-    vignette: true,
-    accentBar: true,
-  },
-  nature: {
-    bgColors: ['#0d1f0d','#152b10','#0a1a0a'],
-    accent: '#7bc67e',
-    text: '#ffffff',
-    shadow: '#000000',
-    pattern: 'dots',
-    overlays: [{shape:'circle',x:0.85,y:0.2,r:0.5,color:'#2d6a2d',alpha:0.4},{shape:'circle',x:0.1,y:0.8,r:0.4,color:'#1a4a1a',alpha:0.3}],
-    font: "'Bebas Neue', Impact, sans-serif",
-    subFont: "'Montserrat', sans-serif",
-    layout: 'center',
-    vignette: true,
-    accentBar: true,
-  },
-  finance: {
-    bgColors: ['#0a0f1a','#0f1825','#080c14'],
-    accent: '#ffd700',
-    text: '#ffffff',
-    shadow: '#000000',
-    pattern: 'lines',
-    overlays: [{shape:'rect',x:0,y:0,w:0.45,h:1,color:'#ffd700',alpha:0.04}],
-    font: "'Oswald', 'Bebas Neue', Impact, sans-serif",
-    subFont: "'Montserrat', sans-serif",
-    layout: 'left',
-    vignette: true,
-    accentBar: true,
-  },
-  horror: {
-    bgColors: ['#000000','#0a0005','#050000'],
-    accent: '#cc0000',
-    text: '#e0e0e0',
-    shadow: '#cc0000',
-    pattern: 'scratch',
-    overlays: [{shape:'circle',x:0.5,y:0.4,r:0.8,color:'#660000',alpha:0.2}],
-    font: "'Bebas Neue', Impact, sans-serif",
-    subFont: "'Oswald', sans-serif",
-    layout: 'center',
-    vignette: true,
-    accentBar: false,
-    neonGlow: true,
-  }
-};
+const FONTS = [
+  {name:'Bebas Neue',f:"'Bebas Neue',Impact,sans-serif",vibe:'Bold · Classic',preview:'EPIC'},
+  {name:'Anton',f:"'Anton',Impact,sans-serif",vibe:'Heavy · Strong',preview:'BOLD'},
+  {name:'Oswald',f:"'Oswald',sans-serif",vibe:'News · Tall',preview:'NEWS'},
+  {name:'Archivo Black',f:"'Archivo Black',sans-serif",vibe:'Modern · Power',preview:'POWER'},
+  {name:'Black Han Sans',f:"'Black Han Sans',sans-serif",vibe:'K-pop · Impact',preview:'HARD'},
+  {name:'Teko',f:"'Teko',sans-serif",vibe:'Sporty · Compact',preview:'SPORT'},
+  {name:'Russo One',f:"'Russo One',sans-serif",vibe:'Military · Force',preview:'FORCE'},
+  {name:'Squada One',f:"'Squada One',sans-serif",vibe:'Square · Strong',preview:'SQUAD'},
+  {name:'Rajdhani',f:"'Rajdhani',sans-serif",vibe:'Tech · Sharp',preview:'TECH'},
+  {name:'Fjalla One',f:"'Fjalla One',sans-serif",vibe:'Press · Editorial',preview:'PRESS'},
+  {name:'Racing Sans One',f:"'Racing Sans One',sans-serif",vibe:'Speed · Racing',preview:'SPEED'},
+  {name:'Kanit',f:"'Kanit',sans-serif",vibe:'Thai · Sharp',preview:'SHARP'},
+  {name:'Dela Gothic One',f:"'Dela Gothic One',sans-serif",vibe:'Ultra Wide',preview:'ULTRA'},
+  {name:'Unbounded',f:"'Unbounded',sans-serif",vibe:'Geometric · Wide',preview:'FREE'},
+  {name:'Exo 2',f:"'Exo 2',sans-serif",vibe:'Sci-fi · Sleek',preview:'CYBER'},
+  {name:'Orbitron',f:"'Orbitron',sans-serif",vibe:'Space · Futuristic',preview:'SPACE'},
+  {name:'Iceland',f:"'Iceland',sans-serif",vibe:'Nordic · Cold',preview:'ICE'},
+  {name:'Tourney',f:"'Tourney',sans-serif",vibe:'Gaming · Bold',preview:'GAME'},
+  {name:'Graduate',f:"'Graduate',sans-serif",vibe:'College · Classic',preview:'CLASS'},
+  {name:'Wallpoet',f:"'Wallpoet',sans-serif",vibe:'Graffiti · Street',preview:'WALL'},
+  {name:'Barlow Condensed',f:"'Barlow Condensed',sans-serif",vibe:'Condensed · Clean',preview:'BARLOW'},
+  {name:'Big Shoulders Display',f:"'Big Shoulders Display',sans-serif",vibe:'Wide · Display',preview:'BIG'},
+  {name:'Chakra Petch',f:"'Chakra Petch',sans-serif",vibe:'HUD · Angular',preview:'HUD'},
+  {name:'Changa',f:"'Changa',sans-serif",vibe:'Arabic · Modern',preview:'CHANGA'},
+  {name:'Chivo',f:"'Chivo',sans-serif",vibe:'Swiss · Bold',preview:'CHIVO'},
+  {name:'Crimson Pro',f:"'Crimson Pro',serif",vibe:'Refined · Press',preview:'CRIMSON'},
+  {name:'DM Sans',f:"'DM Sans',sans-serif",vibe:'Clean · Modern',preview:'DM'},
+  {name:'Encode Sans Condensed',f:"'Encode Sans Condensed',sans-serif",vibe:'Narrow · Tight',preview:'ENCODE'},
+  {name:'Expletus Sans',f:"'Expletus Sans',sans-serif",vibe:'Display · Unique',preview:'EXPLETUS'},
+  {name:'Faustina',f:"'Faustina',serif",vibe:'Slab · Editorial',preview:'FAUST'},
+  {name:'Francois One',f:"'Francois One',sans-serif",vibe:'French · Poster',preview:'FRANCOIS'},
+  {name:'Gruppo',f:"'Gruppo',sans-serif",vibe:'Art Deco · Thin',preview:'GRUPPO'},
+  {name:'Gugi',f:"'Gugi',sans-serif",vibe:'Korean · Modern',preview:'GUGI'},
+  {name:'Hammersmith One',f:"'Hammersmith One',sans-serif",vibe:'Hammer · Impact',preview:'HAMMER'},
+  {name:'Hind',f:"'Hind',sans-serif",vibe:'Indian · Clean',preview:'HIND'},
+  {name:'Krona One',f:"'Krona One',sans-serif",vibe:'Sci-fi · Square',preview:'KRONA'},
+  {name:'Lalezar',f:"'Lalezar',sans-serif",vibe:'Persian · Bold',preview:'LALEZAR'},
+  {name:'League Gothic',f:"'League Gothic',sans-serif",vibe:'Condensed · Tall',preview:'GOTHIC'},
+  {name:'Michroma',f:"'Michroma',sans-serif",vibe:'Tech · Military',preview:'MICHROMA'},
+  {name:'Noto Sans Display',f:"'Noto Sans Display',sans-serif",vibe:'Universal · Clean',preview:'NOTO'},
+  {name:'Quantico',f:"'Quantico',sans-serif",vibe:'Military · Game',preview:'QUANTICO'},
+  {name:'Saira Condensed',f:"'Saira Condensed',sans-serif",vibe:'Condensed · Sharp',preview:'SAIRA'},
+  {name:'Saira Extra Condensed',f:"'Saira Extra Condensed',sans-serif",vibe:'Ultra Narrow',preview:'ULTRA'},
+  {name:'Share Tech',f:"'Share Tech',sans-serif",vibe:'Tech · Terminal',preview:'TECH'},
+  {name:'Syne',f:"'Syne',sans-serif",vibe:'Avant-garde · Art',preview:'SYNE'},
+  {name:'Titillium Web',f:"'Titillium Web',sans-serif",vibe:'Italian · Strong',preview:'TITILLIUM'},
+  {name:'Unica One',f:"'Unica One',sans-serif",vibe:'Geometric · Swiss',preview:'UNICA'},
+  {name:'Work Sans',f:"'Work Sans',sans-serif",vibe:'Grotesque · Bold',preview:'WORK'},
+  {name:'Yantramanav',f:"'Yantramanav',sans-serif",vibe:'Indian · Compact',preview:'YANTRA'},
+  {name:'Zilla Slab',f:"'Zilla Slab',serif",vibe:'Slab · Mozilla',preview:'ZILLA'},
+  {name:'VT323',f:"'VT323',monospace",vibe:'Pixel · Retro',preview:'RETRO'},
+  {name:'Press Start 2P',f:"'Press Start 2P',cursive",vibe:'8-bit · Game',preview:'8BIT'},
+  {name:'Monoton',f:"'Monoton',cursive",vibe:'Neon · Glow',preview:'NEON'},
+  {name:'Share Tech Mono',f:"'Share Tech Mono',monospace",vibe:'Terminal · Code',preview:'TERM'},
+  {name:'Silkscreen',f:"'Silkscreen',sans-serif",vibe:'Pixel · Screen',preview:'PIXEL'},
+  {name:'DotGothic16',f:"'DotGothic16',sans-serif",vibe:'Dot · Gothic',preview:'DOT'},
+  {name:'Bungee',f:"'Bungee',cursive",vibe:'Street Sign',preview:'SIGN'},
+  {name:'Bungee Shade',f:"'Bungee Shade',cursive",vibe:'3D Shadow',preview:'3D'},
+  {name:'Bungee Inline',f:"'Bungee Inline',cursive",vibe:'Inline · Hollow',preview:'INLINE'},
+  {name:'Bungee Outline',f:"'Bungee Outline',cursive",vibe:'Outline · Open',preview:'OUTLINE'},
+  {name:'Fugaz One',f:"'Fugaz One',cursive",vibe:'Fast · Italic',preview:'FAST'},
+  {name:'Righteous',f:"'Righteous',cursive",vibe:'Retro · Fun',preview:'RIGHT'},
+  {name:'Rowdies',f:"'Rowdies',cursive",vibe:'Loud · Chunky',preview:'LOUD'},
+  {name:'Titan One',f:"'Titan One',cursive",vibe:'Titan · Bold',preview:'TITAN'},
+  {name:'Sigmar',f:"'Sigmar',cursive",vibe:'Sigma · Ink',preview:'SIGMA'},
+  {name:'Rampart One',f:"'Rampart One',cursive",vibe:'Castle · Wall',preview:'RAMPART'},
+  {name:'Poetsen One',f:"'Poetsen One',cursive",vibe:'Pop · Playful',preview:'POP'},
+  {name:'Londrina Solid',f:"'Londrina Solid',cursive",vibe:'Street · Rough',preview:'STREET'},
+  {name:'Lilita One',f:"'Lilita One',cursive",vibe:'Chunky · Bubble',preview:'LILITA'},
+  {name:'Luckiest Guy',f:"'Luckiest Guy',cursive",vibe:'Comic · Bold',preview:'LUCKY'},
+  {name:'Black Ops One',f:"'Black Ops One',cursive",vibe:'Military · Ops',preview:'OPS'},
+  {name:'Alfa Slab One',f:"'Alfa Slab One',cursive",vibe:'Slab · Mega',preview:'ALFA'},
+  {name:'Acme',f:"'Acme',sans-serif",vibe:'Comic · Sharp',preview:'ACME'},
+  {name:'Alatsi',f:"'Alatsi',sans-serif",vibe:'Unique · Display',preview:'ALATSI'},
+  {name:'Baloo 2',f:"'Baloo 2',cursive",vibe:'Baloo · Round',preview:'BALOO'},
+  {name:'Bowlby One',f:"'Bowlby One SC',cursive",vibe:'Poster · Bold',preview:'BOWLBY'},
+  {name:'Fredoka',f:"'Fredoka',sans-serif",vibe:'Rounded · Fun',preview:'Fun!'},
+  {name:'Nunito',f:"'Nunito',sans-serif",vibe:'Round · Friendly',preview:'Round'},
+  {name:'Limelight',f:"'Limelight',cursive",vibe:'Glam · Stage',preview:'GLAM'},
+  {name:'Ultra',f:"'Ultra',serif",vibe:'Heavy Serif',preview:'ULTRA'},
+  {name:'Abril Fatface',f:"'Abril Fatface',cursive",vibe:'Magazine · Rich',preview:'MAG'},
+  {name:'Playfair Display',f:"'Playfair Display',serif",vibe:'Luxury · Elegant',preview:'Luxe'},
+  {name:'Cinzel',f:"'Cinzel',serif",vibe:'Roman · Royal',preview:'ROMAN'},
+  {name:'Yeseva One',f:"'Yeseva One',serif",vibe:'Classy · Serif',preview:'Classy'},
+  {name:'Dm Serif Display',f:"'DM Serif Display',serif",vibe:'Display · Serif',preview:'DM SERIF'},
+  {name:'Cormorant',f:"'Cormorant',serif",vibe:'Fashion · High-end',preview:'Cormorant'},
+  {name:'Gloock',f:"'Gloock',serif",vibe:'Slab · Editorial',preview:'Gloock'},
+  {name:'Libre Baskerville',f:"'Libre Baskerville',serif",vibe:'Classic · Book',preview:'LIBRE'},
+  {name:'Merriweather',f:"'Merriweather',serif",vibe:'News · Readable',preview:'MERRI'},
+  {name:'Noto Serif Display',f:"'Noto Serif Display',serif",vibe:'Universal Serif',preview:'NOTO'},
+  {name:'Spectral',f:"'Spectral',serif",vibe:'Sharp Serif',preview:'SPECTRAL'},
+  {name:'Permanent Marker',f:"'Permanent Marker',cursive",vibe:'Marker · Raw',preview:'Marker'},
+  {name:'Kalam',f:"'Kalam',cursive",vibe:'Handwritten · Warm',preview:'Kalam'},
+  {name:'Dancing Script',f:"'Dancing Script',cursive",vibe:'Elegant Script',preview:'Script'},
+  {name:'Nanum Brush Script',f:"'Nanum Brush Script',cursive",vibe:'Brush · Expressive',preview:'Brush'},
+  {name:'Cabin Sketch',f:"'Cabin Sketch',cursive",vibe:'Sketch · Drawn',preview:'SKETCH'},
+  {name:'Special Elite',f:"'Special Elite',cursive",vibe:'Typewriter · Gritty',preview:'Type'},
+  {name:'Patrick Hand',f:"'Patrick Hand',cursive",vibe:'Casual · Hand',preview:'Patrick'},
+  {name:'Handlee',f:"'Handlee',cursive",vibe:'Loose · Fun',preview:'Handlee'},
+  {name:'Gochi Hand',f:"'Gochi Hand',cursive",vibe:'Manga · Hand',preview:'Gochi'},
+  {name:'Rock Salt',f:"'Rock Salt',cursive",vibe:'Grunge · Stamp',preview:'ROCK'},
+  {name:'Caveat',f:"'Caveat',cursive",vibe:'Quick · Scrawl',preview:'Caveat'},
+  {name:'Indie Flower',f:"'Indie Flower',cursive",vibe:'Indie · Floral',preview:'Indie'},
+  {name:'Satisfy',f:"'Satisfy',cursive",vibe:'Formal Script',preview:'Satisfy'},
+  {name:'Great Vibes',f:"'Great Vibes',cursive",vibe:'Calligraphy',preview:'Vibes'},
+  {name:'Pacifico',f:"'Pacifico',cursive",vibe:'Chill · Surf',preview:'Chill'},
+  {name:'Lobster',f:"'Lobster',cursive",vibe:'Retro Script',preview:'Retro'},
+  {name:'Lobster Two',f:"'Lobster Two',cursive",vibe:'Italic Script',preview:'Retro2'},
+  {name:'Allura',f:"'Allura',cursive",vibe:'Wedding · Formal',preview:'Allura'},
+  {name:'Sacramento',f:"'Sacramento',cursive",vibe:'Thin · Elegant',preview:'Sacramento'},
+  {name:'Pinyon Script',f:"'Pinyon Script',cursive",vibe:'Copperplate',preview:'Pinyon'},
+  {name:'Creepster',f:"'Creepster',cursive",vibe:'Horror · Creepy',preview:'CREEP'},
+  {name:'Pirata One',f:"'Pirata One',cursive",vibe:'Pirate · Dark',preview:'PIRATE'},
+  {name:'MedievalSharp',f:"'MedievalSharp',cursive",vibe:'Medieval · Sword',preview:'SWORD'},
+  {name:'Butcherman',f:"'Butcherman',cursive",vibe:'Western · Grunge',preview:'BUTCHER'},
+  {name:'Ewert',f:"'Ewert',cursive",vibe:'Victorian · Inlay',preview:'EWERT'},
+  {name:'Henny Penny',f:"'Henny Penny',cursive",vibe:'Storybook · Quirky',preview:'HENNY'},
+  {name:'Jolly Lodger',f:"'Jolly Lodger',cursive",vibe:'Circus · Retro',preview:'JOLLY'},
+  {name:'Lacquer',f:"'Lacquer',cursive",vibe:'East Asian · Red',preview:'LACQUER'},
+  {name:'Metal Mania',f:"'Metal Mania',cursive",vibe:'Heavy Metal',preview:'METAL'},
+  {name:'Rubik Burned',f:"'Rubik Burned',display",vibe:'Flame · Fire',preview:'BURNED'},
+  {name:'Rubik Dirt',f:"'Rubik Dirt',display",vibe:'Dirt · Rough',preview:'DIRT'},
+  {name:'Rubik Glitch',f:"'Rubik Glitch',display",vibe:'Glitch · Error',preview:'GLITCH'},
+  {name:'Rubik Moonrocks',f:"'Rubik Moonrocks',display",vibe:'Cosmic · Space',preview:'MOON'},
+  {name:'Rubik Puddles',f:"'Rubik Puddles',display",vibe:'Wet · Drip',preview:'DRIP'},
+  {name:'Rubik Spray Paint',f:"'Rubik Spray Paint',display",vibe:'Spray · Street',preview:'SPRAY'},
+  {name:'Rubik Storm',f:"'Rubik Storm',display",vibe:'Storm · Lines',preview:'STORM'},
+  {name:'Rubik Vinyl',f:"'Rubik Vinyl',display",vibe:'Vinyl · Retro',preview:'VINYL'},
+  {name:'Josefin Sans',f:"'Josefin Sans',sans-serif",vibe:'Geometric · Clean',preview:'CLEAN'},
+  {name:'Poiret One',f:"'Poiret One',cursive",vibe:'Art Deco · Thin',preview:'ART DECO'},
+  {name:'Comfortaa',f:"'Comfortaa',cursive",vibe:'Rounded · Soft',preview:'Soft'},
+  {name:'Questrial',f:"'Questrial',sans-serif",vibe:'Minimal · Soft',preview:'QUEST'},
+  {name:'Raleway',f:"'Raleway',sans-serif",vibe:'Fashion · Thin',preview:'RALEWAY'},
+  {name:'Philosopher',f:"'Philosopher',serif",vibe:'Thoughtful · Serif',preview:'PHIL'},
+  {name:'Tenor Sans',f:"'Tenor Sans',sans-serif",vibe:'Fashion · Wide',preview:'TENOR'},
+  {name:'Marcellus',f:"'Marcellus',serif",vibe:'Stone · Classic',preview:'MARCE'},
+  {name:'Cardo',f:"'Cardo',serif",vibe:'Academic · Serif',preview:'CARDO'},
+  {name:'Forum',f:"'Forum',serif",vibe:'Roman · Forum',preview:'FORUM'},
+  {name:'Cormorant Garamond',f:"'Cormorant Garamond',serif",vibe:'Garamond · Luxury',preview:'GARA'},
+  {name:'Bodoni Moda',f:"'Bodoni Moda',serif",vibe:'Vogue · Fashion',preview:'BODONI'},
+  {name:'Italiana',f:"'Italiana',serif",vibe:'Italian · Classic',preview:'ITALIANA'},
+  {name:'Oranienbaum',f:"'Oranienbaum',serif",vibe:'Baroque · Ornate',preview:'ORNATE'},
+  {name:'Baloo Bhai 2',f:"'Baloo Bhai 2',cursive",vibe:'Indian · Fun',preview:'BALOO'},
+  {name:'Bubblegum Sans',f:"'Bubblegum Sans',cursive",vibe:'Bubbly · Kids',preview:'BUBBLE'},
+  {name:'Carter One',f:"'Carter One',cursive",vibe:'Woodtype · Sign',preview:'CARTER'},
+  {name:'Chewy',f:"'Chewy',cursive",vibe:'Chewy · Bubbly',preview:'CHEWY'},
+  {name:'Frijole',f:"'Frijole',cursive",vibe:'Mexican · Fun',preview:'FRIJOLE'},
+  {name:'Fugaz One',f:"'Fugaz One',cursive",vibe:'Fast · Slant',preview:'FAST'},
+  {name:'Jockey One',f:"'Jockey One',sans-serif",vibe:'Racing · Sport',preview:'JOCKEY'},
+  {name:'Leckerli One',f:"'Leckerli One',cursive",vibe:'Swiss · Brush',preview:'LECKER'},
+  {name:'Lemon',f:"'Lemon',cursive",vibe:'Lemon · Round',preview:'LEMON'},
+  {name:'Luckiest Guy',f:"'Luckiest Guy',cursive",vibe:'Comic · Bold',preview:'LUCKY'},
+  {name:'Margarine',f:"'Margarine',cursive",vibe:'Butter · Smooth',preview:'MARG'},
+  {name:'Modak',f:"'Modak',cursive",vibe:'Indian · Juicy',preview:'MODAK'},
+  {name:'Mountains of Christmas',f:"'Mountains of Christmas',cursive",vibe:'Holiday · Festive',preview:'XMAS'},
+  {name:'Shrikhand',f:"'Shrikhand',cursive",vibe:'Gujarati · Bold',preview:'SHRK'},
+  {name:'Sniglet',f:"'Sniglet',cursive",vibe:'Quirky · Fun',preview:'SNIG'},
+  {name:'Titan One',f:"'Titan One',cursive",vibe:'Titan · Mega',preview:'TITAN'},
+  {name:'Varela Round',f:"'Varela Round',sans-serif",vibe:'Round · Friendly',preview:'VARELA'},
+  {name:'Viga',f:"'Viga',sans-serif",vibe:'Bold · Square',preview:'VIGA'},
+  {name:'Wellfleet',f:"'Wellfleet',serif",vibe:'Nautical · Cape',preview:'WELL'},
+  {name:'Yatra One',f:"'Yatra One',cursive",vibe:'Devanagari · Bold',preview:'YATRA'},
+];
 
-// ─── Keyword → theme intelligence ─────────────────────────────────────
-const KEYWORD_MAP = {
-  gaming:  ['game','gaming','fps','minecraft','roblox','fortnite','valorant','cod','gta','pubg','steam','console','xbox','playstation','esport','twitch'],
-  tech:    ['ai','python','javascript','coding','programmer','tech','software','app','startup','robot','machine learning','chatgpt','arduino','linux','cyber'],
-  finance: ['money','invest','stock','crypto','bitcoin','wealth','rich','income','profit','trading','finance','dollar','earn','passive'],
-  horror:  ['horror','scary','haunted','ghost','dark','death','murder','evil','demon','monster','nightmare','creepy','terrifying'],
-  nature:  ['nature','travel','forest','ocean','mountain','hiking','wildlife','planet','earth','green','garden','vegan','yoga','meditation','calm','peace'],
-  dramatic:['viral','shocking','insane','unbelievable','world record','extreme','crazy','wild','epic','mind-blowing','challenge','worst','best ever'],
-  minimal: ['guide','tutorial','how to','learn','course','tips','review','explained','simple','beginner','easy','step by step'],
-};
+const TEXT_COLORS = [
+  {c:'#ffffff'},{c:'#f5f5f5'},{c:'#ffd700'},{c:'#ffa500'},{c:'#ff4444'},
+  {c:'#ff69b4'},{c:'#00ffe7'},{c:'#00ff88'},{c:'#a78bfa'},{c:'#60a5fa'},
+  {c:'#fb923c'},{c:'#f472b6'},{c:'#34d399'},{c:'#facc15'},{c:'#e879f9'},{c:'#000000'},
+];
 
-function detectStyle(title) {
-  const t = title.toLowerCase();
-  let best = null, bestScore = 0;
-  for (const [style, words] of Object.entries(KEYWORD_MAP)) {
-    const score = words.filter(w => t.includes(w)).length;
-    if (score > bestScore) { bestScore = score; best = style; }
+const BG_OPTIONS = [
+  {label:'Black',       c1:'#000000'},
+  {label:'Dark Gray',   c1:'#111111'},
+  {label:'Charcoal',    c1:'#1e1e1e'},
+  {label:'Deep Navy',   c1:'#050a1a'},
+  {label:'Dark Red',    c1:'#150000'},
+  {label:'Deep Green',  c1:'#001408'},
+  {label:'Deep Purple', c1:'#080012'},
+  {label:'Dark Teal',   c1:'#001414'},
+  {label:'White',       c1:'#ffffff'},
+  {label:'Cream',       c1:'#f5f0e8'},
+  {label:'Light Gray',  c1:'#e8e8e8'},
+  {label:'Night',       grad:['#0a0a1a','#1a1030']},
+  {label:'Sunset',      grad:['#1a0005','#3a0820']},
+  {label:'Ocean',       grad:['#020810','#051a30']},
+  {label:'Forest',      grad:['#050f05','#0d2010']},
+  {label:'Gold Dark',   grad:['#0a0800','#1a1200']},
+  {label:'Cyber',       grad:['#000510','#0a0020']},
+  {label:'Volcano',     grad:['#1a0500','#2a0800']},
+  {label:'Galaxy',      grad:['#040008','#0a0520']},
+  {label:'Midnight',    grad:['#000010','#050520']},
+];
+
+let selFont = 0, selColor = '#ffffff', selBg = 0, selSize = 130, selAlign = 'center';
+let filteredFonts = [...FONTS];
+
+function buildGrid() {
+  const g = document.getElementById('fontGrid');
+  g.innerHTML = '';
+  document.getElementById('fontCountLabel').textContent = filteredFonts.length + ' / ' + FONTS.length + ' fonts';
+  if (!filteredFonts.length) {
+    g.innerHTML = '<div class="no-results">No fonts match your search</div>';
+    return;
   }
-  return best || selectedStyle;
+  filteredFonts.forEach((f, i) => {
+    const realIdx = FONTS.indexOf(f);
+    const card = document.createElement('div');
+    card.className = 'font-card' + (realIdx === selFont ? ' active' : '');
+    card.innerHTML = '<div class="font-preview"><span style="font-family:' + f.f + '">' + f.preview + '</span></div><div class="font-meta"><div class="font-name">' + f.name + '</div><div class="font-vibe">' + f.vibe + '</div></div>';
+    card.onclick = () => { selFont = realIdx; buildGrid(); regen(); };
+    g.appendChild(card);
+  });
 }
 
-// ─── Emoji mapping ─────────────────────────────────────────────────────
-const TOPIC_EMOJI = {
-  gaming:['🎮','⚔️','🕹️','🏆','💥'],
-  tech:['💻','🤖','⚡','🔥','🛸'],
-  finance:['💰','📈','🤑','💎','🏦'],
-  horror:['💀','👁️','🩸','🔪','☠️'],
-  nature:['🌿','🌍','🏔️','🌊','🌲'],
-  dramatic:['🔥','😱','💥','⚡','🚀'],
-  minimal:['✦','→','▶','◆','✓'],
-  cinematic:['🎬','🎥','⭐','🌟','✨'],
-};
-
-function getEmoji(style) {
-  const arr = TOPIC_EMOJI[style] || TOPIC_EMOJI.cinematic;
-  return arr[Math.floor(Math.random() * arr.length)];
+function filterFonts() {
+  const q = document.getElementById('fontSearch').value.toLowerCase().trim();
+  filteredFonts = q ? FONTS.filter(f => f.name.toLowerCase().includes(q) || f.vibe.toLowerCase().includes(q)) : [...FONTS];
+  buildGrid();
 }
 
-// ─── Text splitting ────────────────────────────────────────────────────
+function buildColors() {
+  const s = document.getElementById('colorSwatches');
+  s.innerHTML = '';
+  TEXT_COLORS.forEach(({c}) => {
+    const d = document.createElement('div');
+    d.className = 'swatch' + (selColor === c ? ' active' : '');
+    d.style.background = c;
+    if (c === '#ffffff' || c === '#f5f5f5') d.style.boxShadow = 'inset 0 0 0 1px #444';
+    d.onclick = () => { selColor = c; document.getElementById('customColor').value = c; buildColors(); regen(); };
+    s.appendChild(d);
+  });
+}
+
+function setCustomColor(v) { selColor = v; buildColors(); regen(); }
+
+function buildBg() {
+  const s = document.getElementById('bgSwatches');
+  s.innerHTML = '';
+  BG_OPTIONS.forEach((b, i) => {
+    const d = document.createElement('div');
+    d.className = 'bg-swatch' + (selBg === i ? ' active' : '');
+    d.style.background = b.grad ? 'linear-gradient(135deg,' + b.grad[0] + ',' + b.grad[1] + ')' : b.c1;
+    if (b.c1 === '#ffffff' || b.c1 === '#f5f0e8' || b.c1 === '#e8e8e8') d.style.boxShadow = 'inset 0 0 0 1px #555';
+    d.title = b.label;
+    d.onclick = () => { selBg = i; buildBg(); regen(); };
+    s.appendChild(d);
+  });
+}
+
+document.querySelectorAll('[data-size]').forEach(p => {
+  p.onclick = () => { document.querySelectorAll('[data-size]').forEach(x => x.classList.remove('active')); p.classList.add('active'); selSize = parseInt(p.dataset.size); regen(); };
+});
+document.querySelectorAll('[data-align]').forEach(p => {
+  p.onclick = () => { document.querySelectorAll('[data-align]').forEach(x => x.classList.remove('active')); p.classList.add('active'); selAlign = p.dataset.align; regen(); };
+});
+
+document.getElementById('titleInput').addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
+document.getElementById('titleInput').addEventListener('input', () => regen());
+
+function regen() { const t = document.getElementById('titleInput').value.trim(); if (t) drawThumbnail(t); }
+function generate() { const t = document.getElementById('titleInput').value.trim(); if (!t) { document.getElementById('titleInput').focus(); return; } drawThumbnail(t); }
+
 function splitTitle(title) {
   const words = title.split(' ');
-  if (words.length <= 3) return [title.toUpperCase()];
-  if (words.length <= 6) {
-    const mid = Math.ceil(words.length / 2);
-    return [words.slice(0, mid).join(' ').toUpperCase(), words.slice(mid).join(' ').toUpperCase()];
-  }
-  const third = Math.ceil(words.length / 2);
-  return [words.slice(0, third).join(' ').toUpperCase(), words.slice(third).join(' ').toUpperCase()];
+  if (words.length <= 2) return [title.toUpperCase()];
+  const mid = Math.ceil(words.length / 2);
+  return [words.slice(0, mid).join(' ').toUpperCase(), words.slice(mid).join(' ').toUpperCase()];
 }
 
-// ─── Canvas drawing ────────────────────────────────────────────────────
-let selectedStyle = 'cinematic';
-
-function drawThumbnail(title, styleName) {
+function drawThumbnail(title) {
   const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d');
   const W = 1280, H = 720;
   canvas.width = W; canvas.height = H;
-
-  const S = STYLES[styleName] || STYLES.cinematic;
-
-  // Background gradient
-  const grd = ctx.createLinearGradient(0, 0, W, H);
-  grd.addColorStop(0, S.bgColors[0]);
-  grd.addColorStop(0.5, S.bgColors[1] || S.bgColors[0]);
-  grd.addColorStop(1, S.bgColors[2] || S.bgColors[0]);
-  ctx.fillStyle = grd;
+  const bg = BG_OPTIONS[selBg];
+  if (bg.grad) {
+    const grd = ctx.createLinearGradient(0, 0, W, H);
+    grd.addColorStop(0, bg.grad[0]); grd.addColorStop(1, bg.grad[1]);
+    ctx.fillStyle = grd;
+  } else { ctx.fillStyle = bg.c1; }
   ctx.fillRect(0, 0, W, H);
 
-  // Overlay shapes
-  S.overlays.forEach(o => {
-    ctx.save();
-    ctx.globalAlpha = o.alpha;
-    ctx.fillStyle = o.color;
-    if (o.shape === 'circle') {
-      ctx.beginPath();
-      ctx.arc(o.x * W, o.y * H, o.r * Math.max(W, H) * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (o.shape === 'rect') {
-      ctx.fillRect(o.x * W, o.y * H, (o.w || 1) * W, (o.h || 1) * H);
-    }
-    ctx.restore();
-  });
-
-  // Patterns
-  ctx.save();
-  ctx.globalAlpha = 0.07;
-  ctx.strokeStyle = S.accent;
-  ctx.lineWidth = 1;
-  if (S.pattern === 'grid') {
-    for (let x = 0; x < W; x += 70) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-    for (let y = 0; y < H; y += 70) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
-  } else if (S.pattern === 'dots') {
-    ctx.fillStyle = S.accent;
-    for (let x = 40; x < W; x += 60) for (let y = 40; y < H; y += 60) {
-      ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI*2); ctx.fill();
-    }
-  } else if (S.pattern === 'diagonal') {
-    for (let i = -H; i < W + H; i += 80) {
-      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i + H, H); ctx.stroke();
-    }
-  } else if (S.pattern === 'lines') {
-    for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
-  } else if (S.pattern === 'circuit') {
-    ctx.strokeStyle = S.accent;
-    for (let i = 0; i < 18; i++) {
-      const sx = Math.random()*W, sy = Math.random()*H;
-      const ex = sx + (Math.random()-0.5)*400;
-      ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,sy); ctx.lineTo(ex, sy+(Math.random()-0.5)*200); ctx.stroke();
-      ctx.beginPath(); ctx.arc(ex, sy, 4, 0, Math.PI*2); ctx.stroke();
-    }
-  } else if (S.pattern === 'scratch') {
-    ctx.lineWidth = 0.8;
-    for (let i = 0; i < 30; i++) {
-      const sx = Math.random()*W;
-      ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx + (Math.random()-0.5)*60, H); ctx.stroke();
-    }
-  }
-  ctx.restore();
-
-  // Vignette
-  if (S.vignette) {
-    const vig = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.9);
-    vig.addColorStop(0, 'rgba(0,0,0,0)');
-    vig.addColorStop(1, 'rgba(0,0,0,0.75)');
-    ctx.fillStyle = vig;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  // Layout
+  const fontFamily = FONTS[selFont].f;
   const lines = splitTitle(title);
-  const emoji = getEmoji(styleName);
-  const isLeft = S.layout === 'left';
-  const cx = isLeft ? 90 : W / 2;
-  const textAlign = isLeft ? 'left' : 'center';
-
-  // Font sizes based on line count and length
+  let fs = selSize;
   const maxLen = Math.max(...lines.map(l => l.length));
-  let fs = maxLen > 22 ? 110 : maxLen > 16 ? 130 : 150;
-  if (lines.length > 2) fs = Math.min(fs, 100);
+  if (maxLen > 28) fs = Math.min(fs, 85);
+  else if (maxLen > 22) fs = Math.min(fs, 105);
+  else if (maxLen > 16) fs = Math.min(fs, 130);
 
-  ctx.textAlign = textAlign;
-
-  // Neon glow effect
-  if (S.neonGlow) {
-    ctx.save();
-    ctx.shadowColor = S.accent;
-    ctx.shadowBlur = 40;
-    ctx.globalAlpha = 0.5;
-    ctx.font = `${fs}px ${S.font}`;
-    ctx.fillStyle = S.accent;
-    const totalH = lines.length * (fs * 1.05);
-    const startY = H/2 - totalH/2 + fs * 0.85;
-    lines.forEach((line, i) => ctx.fillText(line, cx, startY + i * fs * 1.05));
-    ctx.restore();
-  }
-
-  // Main text
-  ctx.font = `${fs}px ${S.font}`;
-  ctx.textAlign = textAlign;
-  ctx.fillStyle = S.text;
-  ctx.shadowColor = S.shadow;
-  ctx.shadowBlur = 20;
-  ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3;
-
-  const totalH = lines.length * (fs * 1.05);
-  const startY = H/2 - totalH/2 + fs * 0.85;
-  lines.forEach((line, i) => ctx.fillText(line, cx, startY + i * fs * 1.05));
-
+  ctx.font = fs + 'px ' + fontFamily;
+  ctx.textAlign = selAlign;
+  ctx.fillStyle = selColor;
+  const isDark = selColor === '#000000' || selColor === '#1a1a1a';
+  ctx.shadowColor = isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.85)';
+  ctx.shadowBlur = 18; ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3;
+  const lineH = fs * 1.12, totalH = lines.length * lineH;
+  let cx = W / 2;
+  if (selAlign === 'left') cx = 80;
+  else if (selAlign === 'right') cx = W - 80;
+  const startY = H / 2 - totalH / 2 + fs * 0.85;
+  lines.forEach((line, i) => ctx.fillText(line, cx, startY + i * lineH));
   ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
-
-  // Accent bar
-  if (S.accentBar) {
-    const barY = startY + totalH + 12;
-    if (isLeft) {
-      ctx.fillStyle = S.accent;
-      ctx.fillRect(90, barY, 120, 6);
-    } else {
-      ctx.fillStyle = S.accent;
-      ctx.fillRect(W/2 - 60, barY, 120, 6);
-    }
-  }
-
-  // Emoji decoration
-  ctx.font = `${isLeft ? 80 : 72}px serif`;
-  ctx.textAlign = isLeft ? 'right' : 'center';
-  if (isLeft) {
-    ctx.fillText(emoji, W - 120, H/2 + 40);
-  } else {
-    ctx.fillText(emoji, W/2, startY - fs * 1.1);
-  }
-
-  // Minimal dark bar for minimal style
-  if (styleName === 'minimal') {
-    ctx.fillStyle = '#1a1a1a';
-    ctx.fillRect(0, H * 0.87, W, H * 0.13);
-    ctx.font = `bold 28px 'Montserrat', sans-serif`;
-    ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'right';
-    ctx.fillText('▶  WATCH NOW', W - 60, H * 0.87 + 52);
-  }
-
-  // Corner watermark
-  ctx.font = `bold 22px 'Montserrat', sans-serif`;
-  ctx.textAlign = 'right';
-  ctx.fillStyle = 'rgba(255,255,255,0.15)';
-  ctx.fillText('ThumbCraft', W - 30, H - 22);
-
+  ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(255,255,255,0.08)';
+  ctx.fillText('ThumbCraft', W - 22, H - 16);
   document.getElementById('ph').style.display = 'none';
-}
-
-// ─── Event handlers ────────────────────────────────────────────────────
-document.querySelectorAll('.pill').forEach(p => {
-  p.onclick = () => {
-    document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
-    p.classList.add('active');
-    selectedStyle = p.dataset.style;
-  };
-});
-
-document.getElementById('titleInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') generate();
-});
-
-function generate() {
-  const title = document.getElementById('titleInput').value.trim();
-  if (!title) { document.getElementById('titleInput').focus(); return; }
-  const autoStyle = detectStyle(title);
-  const useStyle = autoStyle !== selectedStyle && document.querySelectorAll('.pill.active')[0]?.dataset.style === selectedStyle
-    ? autoStyle : selectedStyle;
-
-  // Highlight detected style pill
-  document.querySelectorAll('.pill').forEach(p => {
-    p.classList.toggle('active', p.dataset.style === useStyle);
-  });
-  selectedStyle = useStyle;
-
-  drawThumbnail(title, useStyle);
   document.getElementById('dlBtn').disabled = false;
   document.getElementById('cpyBtn').disabled = false;
-  document.getElementById('status').textContent = '✓ Done · 1280 × 720 px';
+  document.getElementById('status').textContent = '✓ Ready · 1280×720 · ' + FONTS[selFont].name;
 }
 
 function downloadPNG() {
-  const canvas = document.getElementById('c');
-  const title = document.getElementById('titleInput').value.trim().replace(/\s+/g, '-').toLowerCase().slice(0, 30) || 'thumbnail';
-  const link = document.createElement('a');
-  link.download = `thumbnail-${title}.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
+  const c = document.getElementById('c');
+  const slug = document.getElementById('titleInput').value.trim().replace(/\s+/g, '-').toLowerCase().slice(0, 30) || 'thumbnail';
+  const a = document.createElement('a'); a.download = 'thumbnail-' + slug + '.png'; a.href = c.toDataURL('image/png'); a.click();
 }
 
 async function copyCanvas() {
   try {
-    const canvas = document.getElementById('c');
-    canvas.toBlob(async blob => {
+    document.getElementById('c').toBlob(async blob => {
       await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-      const btn = document.getElementById('cpyBtn');
-      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
-      setTimeout(() => { btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Image`; }, 2000);
+      const b = document.getElementById('cpyBtn');
+      b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+      setTimeout(() => { b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Image'; }, 2000);
     });
-  } catch(e) { alert('Copy not supported in this browser. Use Download instead.'); }
+  } catch(e) { alert('Copy not supported — use Download instead.'); }
 }
+
+buildGrid(); buildColors(); buildBg();
 </script>
 </body>
 </html>
