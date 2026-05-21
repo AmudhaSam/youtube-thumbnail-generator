@@ -89,6 +89,11 @@ header p{font-size:11px;color:var(--text2);letter-spacing:.04em}
 .line-num{font-size:11px;color:var(--text2);font-weight:700;min-width:18px;text-align:center;}
 .line-size{width:64px;padding:9px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:12px;font-weight:700;outline:none;text-align:center;transition:border-color .2s;}
 .line-size:focus{border-color:var(--red);}
+.line-style-row{display:flex;gap:5px;align-items:center;margin-top:5px;padding:4px 0;}
+.style-btn{width:28px;height:28px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;}
+.style-btn:hover{border-color:#555;color:var(--text);}
+.style-btn.on{background:var(--red);color:#fff;border-color:var(--red);}
+.line-color-swatch{width:28px;height:28px;border-radius:5px;border:1px solid var(--border);cursor:pointer;flex-shrink:0;}
 .input-row input::placeholder{color:#444}
 .gen-btn{padding:11px 22px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s,transform .1s}
 .gen-btn:hover{background:var(--red2)}
@@ -504,7 +509,7 @@ const BG_OPTIONS = [];
 
 let selFont = 0, selColor = '#ffffff', selSize = 130, selAlign = 'center', selLines = 2, selLineSpacing = 1.12, selLetterSpacing = 0, selManual = false;
 // Per-line data: [{text, fontIdx}]
-let lineData = [{text:'', fontIdx:0, fontSize:130}, {text:'', fontIdx:0, fontSize:130}];
+let lineData = [{text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false}, {text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false}];
 let filteredFonts = [...FONTS];
 
 function buildGrid() {
@@ -570,18 +575,27 @@ function buildLineEditor() {
   const wrap = document.getElementById('lineEditorWrap');
   wrap.innerHTML = '';
   lineData.forEach((ld, i) => {
-    const row = document.createElement('div');
-    row.className = 'line-row';
+    // Outer card wrapper
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:10px;';
+
+    // ── Row 1: label + text input + font select + size ──
+    const row1 = document.createElement('div');
+    row1.style.cssText = 'display:flex;gap:8px;align-items:center;';
+
+    const label = document.createElement('span');
+    label.className = 'line-num';
+    label.textContent = 'L' + (i+1);
 
     const textInput = document.createElement('input');
     textInput.type = 'text';
     textInput.placeholder = 'Line ' + (i+1) + ' text…';
     textInput.value = ld.text;
-    textInput.style.cssText = 'flex:1;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;outline:none;';
+    textInput.style.cssText = 'flex:1;padding:8px 10px;background:var(--bg,#0d0d0d);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;outline:none;min-width:0;';
     textInput.oninput = (function(idx){ return function(){ lineData[idx].text = this.value; regen(); }; })(i);
 
     const sel = document.createElement('select');
-    sel.style.cssText = 'padding:9px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:11px;outline:none;cursor:pointer;max-width:160px;';
+    sel.style.cssText = 'padding:8px 6px;background:var(--bg,#0d0d0d);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;outline:none;cursor:pointer;max-width:150px;';
     sel.innerHTML = buildFontOptions(ld.fontIdx);
     sel.onchange = (function(idx){ return function(){ lineData[idx].fontIdx = parseInt(this.value); regen(); }; })(i);
 
@@ -590,24 +604,79 @@ function buildLineEditor() {
     sizeInput.className = 'line-size';
     sizeInput.min = 20; sizeInput.max = 400;
     sizeInput.value = ld.fontSize || 130;
-    sizeInput.title = 'Font size (px)';
+    sizeInput.title = 'Font size px';
     sizeInput.oninput = (function(idx){ return function(){ lineData[idx].fontSize = parseInt(this.value) || 130; regen(); }; })(i);
 
-    const label = document.createElement('span');
-    label.className = 'line-num';
-    label.textContent = 'L' + (i+1);
+    row1.appendChild(label);
+    row1.appendChild(textInput);
+    row1.appendChild(sel);
+    row1.appendChild(sizeInput);
 
-    row.appendChild(label);
-    row.appendChild(textInput);
-    row.appendChild(sel);
-    row.appendChild(sizeInput);
-    wrap.appendChild(row);
+    // ── Row 2: color swatch + B I U toggles ──
+    const row2 = document.createElement('div');
+    row2.className = 'line-style-row';
+
+    // Color swatch (opens native color picker)
+    const colorWrap = document.createElement('label');
+    colorWrap.title = 'Text color';
+    colorWrap.style.cssText = 'position:relative;cursor:pointer;';
+    const colorSwatch = document.createElement('div');
+    colorSwatch.className = 'line-color-swatch';
+    colorSwatch.style.background = ld.color || '#ffffff';
+    colorSwatch.style.boxShadow = (ld.color === '#ffffff' || !ld.color) ? 'inset 0 0 0 1px #444' : 'none';
+    const colorPicker = document.createElement('input');
+    colorPicker.type = 'color';
+    colorPicker.value = ld.color || '#ffffff';
+    colorPicker.style.cssText = 'position:absolute;width:0;height:0;opacity:0;';
+    colorPicker.oninput = (function(idx, swatch){ return function(){ lineData[idx].color = this.value; swatch.style.background = this.value; swatch.style.boxShadow='none'; regen(); }; })(i, colorSwatch);
+    colorWrap.appendChild(colorSwatch);
+    colorWrap.appendChild(colorPicker);
+
+    // B button
+    const btnB = document.createElement('button');
+    btnB.className = 'style-btn' + (ld.bold ? ' on' : '');
+    btnB.title = 'Bold';
+    btnB.innerHTML = '<b>B</b>';
+    btnB.onclick = (function(idx, btn){ return function(){ lineData[idx].bold = !lineData[idx].bold; btn.classList.toggle('on'); regen(); }; })(i, btnB);
+
+    // I button
+    const btnI = document.createElement('button');
+    btnI.className = 'style-btn' + (ld.italic ? ' on' : '');
+    btnI.title = 'Italic';
+    btnI.innerHTML = '<i>I</i>';
+    btnI.onclick = (function(idx, btn){ return function(){ lineData[idx].italic = !lineData[idx].italic; btn.classList.toggle('on'); regen(); }; })(i, btnI);
+
+    // U button
+    const btnU = document.createElement('button');
+    btnU.className = 'style-btn' + (ld.underline ? ' on' : '');
+    btnU.title = 'Underline';
+    btnU.innerHTML = '<u>U</u>';
+    btnU.onclick = (function(idx, btn){ return function(){ lineData[idx].underline = !lineData[idx].underline; btn.classList.toggle('on'); regen(); }; })(i, btnU);
+
+    const colorLabel = document.createElement('span');
+    colorLabel.style.cssText = 'font-size:10px;color:var(--text2);margin-left:2px;';
+    colorLabel.textContent = 'color';
+
+    const styleLabel = document.createElement('span');
+    styleLabel.style.cssText = 'font-size:10px;color:var(--text2);margin-left:6px;';
+    styleLabel.textContent = 'style';
+
+    row2.appendChild(colorWrap);
+    row2.appendChild(colorLabel);
+    row2.appendChild(btnB);
+    row2.appendChild(btnI);
+    row2.appendChild(btnU);
+    row2.appendChild(styleLabel);
+
+    card.appendChild(row1);
+    card.appendChild(row2);
+    wrap.appendChild(card);
   });
 }
 
 function addLine() {
   if (lineData.length >= 6) return;
-  lineData.push({text:'', fontIdx:selFont, fontSize:selSize});
+  lineData.push({text:'', fontIdx:selFont, fontSize:selSize, color:selColor, bold:false, italic:false, underline:false});
   buildLineEditor(); regen();
 }
 
@@ -624,7 +693,7 @@ function toggleMode() {
   document.getElementById('modeToggle').style.background = selManual ? 'var(--red)' : 'var(--border)';
   document.getElementById('modeKnob').style.left = selManual ? '19px' : '3px';
   document.getElementById('modeHint').style.color = selManual ? 'var(--text2)' : 'var(--red)';
-  if (selManual) { lineData = lineData.map(l => ({...l, fontIdx:selFont, fontSize:selSize})); buildLineEditor(); }
+  if (selManual) { lineData = lineData.map(l => ({...l, fontIdx:selFont, fontSize:selSize, color:selColor, bold:false, italic:false, underline:false})); buildLineEditor(); }
   regen();
 }
 
@@ -759,9 +828,15 @@ function drawThumbnailMultiFont() {
   visibleLines.forEach((ld, i) => {
     const fs = ld.fontSize || selSize;
     const fontFamily = FONTS[ld.fontIdx] ? FONTS[ld.fontIdx].f : FONTS[selFont].f;
-    ctx.font = fs + 'px ' + fontFamily;
+    const weight = ld.bold ? 'bold' : 'normal';
+    const style = ld.italic ? 'italic' : 'normal';
+    ctx.font = style + ' ' + weight + ' ' + fs + 'px ' + fontFamily;
     ctx.textAlign = selAlign;
-    ctx.fillStyle = selColor;
+    const lineColor = ld.color || selColor;
+    ctx.fillStyle = lineColor;
+    const isDarkLine = lineColor === '#000000';
+    ctx.shadowColor = isDarkLine ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 16; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
     const y = lineYs[i];
     const line = ld.text;
     if (selLetterSpacing !== 0) {
@@ -770,8 +845,21 @@ function drawThumbnailMultiFont() {
       let x = selAlign === 'center' ? cx - totalW/2 : selAlign === 'right' ? cx - totalW : cx;
       ctx.textAlign = 'left';
       chars.forEach(ch => { ctx.fillText(ch, x, y); x += ctx.measureText(ch).width + selLetterSpacing; });
+      if (ld.underline) {
+        const lineW = totalW;
+        const ux = selAlign === 'center' ? cx - lineW/2 : selAlign === 'right' ? cx - lineW : cx;
+        ctx.shadowBlur = 0;
+        ctx.fillRect(ux, y + fs * 0.12, lineW, Math.max(2, fs * 0.06));
+      }
+      ctx.textAlign = selAlign;
     } else {
       ctx.fillText(line, cx, y);
+      if (ld.underline) {
+        ctx.shadowBlur = 0;
+        const tw = ctx.measureText(line).width;
+        const ux = selAlign === 'center' ? cx - tw/2 : selAlign === 'right' ? cx - tw : cx;
+        ctx.fillRect(ux, y + fs * 0.12, tw, Math.max(2, fs * 0.06));
+      }
     }
   });
 
