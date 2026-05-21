@@ -95,6 +95,15 @@ canvas{width:100%!important;height:100%!important;display:block}
 .dl-btn:disabled{opacity:.3;cursor:not-allowed}
 .dl-btn svg{width:13px;height:13px}
 .status{flex:1;text-align:right;font-size:11px;color:var(--text2)}
+.bg-section{margin-bottom:18px;}
+.bg-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center;}
+.bg-swatch{width:32px;height:32px;border-radius:7px;cursor:pointer;border:2px solid transparent;transition:border-color .12s,transform .1s;flex-shrink:0;}
+.bg-swatch:hover{transform:scale(1.1);}
+.bg-swatch.active{border-color:#fff;}
+.bg-swatch.transparent-swatch{background:repeating-conic-gradient(#555 0% 25%,#333 0% 50%) 0 0/12px 12px;}
+.bg-custom-wrap{display:flex;align-items:center;gap:6px;}
+.bg-custom-wrap input[type=color]{width:32px;height:32px;border:none;border-radius:7px;cursor:pointer;padding:0;background:none;}
+.bg-custom-wrap span{font-size:11px;color:var(--text2);}
 </style>
 </head>
 <body>
@@ -134,6 +143,27 @@ canvas{width:100%!important;height:100%!important;display:block}
       <div class="slider-row">
         <input type="range" id="letterSpacing" min="-10" max="60" step="1" value="0" oninput="selLetterSpacing=parseInt(this.value);document.getElementById('letVal').textContent=this.value+'px';regen()" />
         <span class="slider-val" id="letVal">0px</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-section">
+    <div class="flabel">background</div>
+    <div class="bg-options" id="bgOptions">
+      <div class="bg-swatch transparent-swatch active" data-bg="transparent" title="Transparent" onclick="setBg(this,'transparent')"></div>
+      <div class="bg-swatch" data-bg="#000000" style="background:#000000;" title="Black" onclick="setBg(this,'#000000')"></div>
+      <div class="bg-swatch" data-bg="#111111" style="background:#111111;" title="Dark Gray" onclick="setBg(this,'#111111')"></div>
+      <div class="bg-swatch" data-bg="#ffffff" style="background:#ffffff;box-shadow:inset 0 0 0 1px #555;" title="White" onclick="setBg(this,'#ffffff')"></div>
+      <div class="bg-swatch" data-bg="#1a1a2e" style="background:#1a1a2e;" title="Deep Navy" onclick="setBg(this,'#1a1a2e')"></div>
+      <div class="bg-swatch" data-bg="#0d0d0d" style="background:#0d0d0d;" title="Near Black" onclick="setBg(this,'#0d0d0d')"></div>
+      <div class="bg-swatch" data-bg="#1a0000" style="background:#1a0000;" title="Dark Red" onclick="setBg(this,'#1a0000')"></div>
+      <div class="bg-swatch" data-bg="#001a0a" style="background:#001a0a;" title="Dark Green" onclick="setBg(this,'#001a0a')"></div>
+      <div class="bg-swatch" data-bg="#0d0018" style="background:#0d0018;" title="Dark Purple" onclick="setBg(this,'#0d0018')"></div>
+      <div class="bg-swatch" data-bg="#1a1000" style="background:#1a1000;" title="Dark Gold" onclick="setBg(this,'#1a1000')"></div>
+      <div class="bg-swatch" data-bg="#001a1a" style="background:#001a1a;" title="Dark Teal" onclick="setBg(this,'#001a1a')"></div>
+      <div class="bg-custom-wrap">
+        <input type="color" id="bgCustomColor" value="#000000" oninput="setBgCustom(this.value)" title="Custom color" />
+        <span>custom</span>
       </div>
     </div>
   </div>
@@ -513,11 +543,11 @@ const TEXT_COLORS = [
   {c:'#fb923c'},{c:'#f472b6'},{c:'#34d399'},{c:'#facc15'},{c:'#e879f9'},{c:'#000000'},
 ];
 
-let selColor = '#ffffff', selAlign = 'center', selLineSpacing = 1.12, selLetterSpacing = 0;
+let selColor = '#ffffff', selAlign = 'center', selLineSpacing = 1.12, selLetterSpacing = 0, selBg = 'transparent';
 const DEF_SIZE = 130;
 // Per-line data: [{text, fontIdx}]
-let lineData = [{text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3},
-                {text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3}];
+let lineData = [{text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, glowColor:'', stroke:false, strokeColor:'#000000', strokeW:3},
+                {text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, glowColor:'', stroke:false, strokeColor:'#000000', strokeW:3}];
 let filteredFonts = [...FONTS];
 
 function buildColors() {
@@ -675,7 +705,8 @@ function buildLineEditor() {
     btnGW.className = 'fx-btn' + (ld.glow ? ' on' : '');
     btnGW.textContent = '✨ Glow';
     btnGW.onclick = (function(idx, btn){ return function(){ lineData[idx].glow = !lineData[idx].glow; btn.classList.toggle('on'); regen(); }; })(i, btnGW);
-    row3.appendChild(btnGW);
+    const gwPick = mkColorPick(ld.glowColor || ld.color || '#ffffff', (function(idx){ return function(v){ lineData[idx].glowColor = v; regen(); }; })(i));
+    row3.appendChild(btnGW); row3.appendChild(gwPick);
 
     card.appendChild(row1);
     card.appendChild(row2);
@@ -686,7 +717,7 @@ function buildLineEditor() {
 
 function addLine() {
   if (lineData.length >= 6) return;
-  lineData.push({text:'', fontIdx:0, fontSize:DEF_SIZE, color:selColor, bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3});
+  lineData.push({text:'', fontIdx:0, fontSize:DEF_SIZE, color:selColor, bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, glowColor:'', stroke:false, strokeColor:'#000000', strokeW:3});
   buildLineEditor(); regen();
 }
 
@@ -694,6 +725,18 @@ function removeLine() {
   if (lineData.length <= 1) return;
   lineData.pop();
   buildLineEditor(); regen();
+}
+
+function setBg(el, val) {
+  selBg = val;
+  document.querySelectorAll('.bg-swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  regen();
+}
+function setBgCustom(val) {
+  selBg = val;
+  document.querySelectorAll('.bg-swatch').forEach(s => s.classList.remove('active'));
+  regen();
 }
 
 function regen() {
@@ -711,6 +754,12 @@ function drawThumbnailMultiFont() {
   const W = 1280, H = 720;
   canvas.width = W; canvas.height = H;
   ctx.clearRect(0, 0, W, H);
+  if (selBg && selBg !== 'transparent') {
+    ctx.save();
+    ctx.fillStyle = selBg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
 
   const visibleLines = lineData;
   const lineHeights = visibleLines.map(ld => (ld.fontSize || DEF_SIZE) * selLineSpacing);
@@ -782,10 +831,13 @@ function drawThumbnailMultiFont() {
 
     // ── 3. GLOW (blurred halo pass) ───────────────────────────────
     if (ld.glow) {
-      ctx.shadowColor = lineColor;
-      ctx.shadowBlur = fs * 0.35;
+      const glowCol = (ld.glowColor && ld.glowColor !== '') ? ld.glowColor : lineColor;
+      ctx.shadowColor = glowCol;
+      ctx.shadowBlur = fs * 0.45;
       ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
       ctx.fillStyle = lineColor;
+      drawText('fill');
+      ctx.shadowBlur = fs * 0.25;
       drawText('fill');
       ctx.shadowBlur = 0;
     }
