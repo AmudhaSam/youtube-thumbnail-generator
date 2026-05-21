@@ -60,9 +60,6 @@ header p{font-size:11px;color:var(--text2)}
 .bg-grad-wrap select{background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:10px;padding:2px 4px;cursor:pointer}
 
 /* Templates */
-.templates-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-.tpl-btn{padding:5px 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap}
-.tpl-btn:hover{border-color:#555;color:var(--text);background:var(--surface)}
 
 /* Line editor */
 .line-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:9px}
@@ -129,10 +126,6 @@ canvas{width:100%!important;height:100%!important;display:block}
 </header>
 
 <div class="card">
-
-  <!-- TEMPLATES -->
-  <div class="flabel">quick templates</div>
-  <div class="templates-row" id="templatesRow"></div>
 
   <!-- BG -->
   <div class="bg-section">
@@ -633,60 +626,8 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey||e.metaKey) && (e.key==='y' || (e.key==='z'&&e.shiftKey))) { e.preventDefault(); redoFn(); }
 });
 
-// ── Templates ────────────────────────────────────────────────────────
-const TEMPLATES = [
-  { name:'Gaming Neon', bg:'#050510', lines:[
-    {text:'LEVEL UP', fontIdx:FONTS.findIndex(f=>f.name==='Bebas Neue'), fontSize:160, color:'#00ffe7', glow:true, glowColor:'#00ffe7', bold:true},
-    {text:'YOUR GAME', fontIdx:FONTS.findIndex(f=>f.name==='Orbitron'), fontSize:90, color:'#ffffff', stroke:true, strokeColor:'#00ffe7', strokeW:2}
-  ]},
-  { name:'Bold Red', bg:'#1a0000', lines:[
-    {text:'TOP 10', fontIdx:FONTS.findIndex(f=>f.name==='Anton'), fontSize:180, color:'#ff4444', shadow3d:true, bold:true},
-    {text:'SECRETS', fontIdx:FONTS.findIndex(f=>f.name==='Oswald'), fontSize:110, color:'#ffffff', outline:true, outColor:'#ff4444', outW:3}
-  ]},
-  { name:'Minimal Dark', bg:'#000000', lines:[
-    {text:'How I Made', fontIdx:FONTS.findIndex(f=>f.name==='Playfair Display'), fontSize:120, color:'#ffffff', italic:true},
-    {text:'$10,000', fontIdx:FONTS.findIndex(f=>f.name==='Bebas Neue'), fontSize:200, color:'#ffd700', glow:true, glowColor:'#ffd700'}
-  ]},
-  { name:'Cinematic Gold', bg:'#0a0a0a', lines:[
-    {text:'THE TRUTH', fontIdx:FONTS.findIndex(f=>f.name==='Cinzel'), fontSize:130, color:'#e8c46a', stroke:true, strokeColor:'#e8c46a', strokeW:1, glow:true, glowColor:'#e8c46a'},
-    {text:'ABOUT EVERYTHING', fontIdx:FONTS.findIndex(f=>f.name==='Cinzel'), fontSize:70, color:'#ffffff', outline:true, outColor:'#e8c46a', outW:2}
-  ]},
-  { name:'Horror Dark', bg:'#000000', lines:[
-    {text:'DONT', fontIdx:FONTS.findIndex(f=>f.name==='Creepster'), fontSize:190, color:'#cc0000', glow:true, glowColor:'#cc0000', shadow3d:true},
-    {text:'WATCH ALONE', fontIdx:FONTS.findIndex(f=>f.name==='Creepster'), fontSize:100, color:'#e0e0e0', stroke:true, strokeColor:'#cc0000', strokeW:2}
-  ]},
-  { name:'Tech Blue', bg:'#020810', lines:[
-    {text:'AI WILL', fontIdx:FONTS.findIndex(f=>f.name==='Exo 2'), fontSize:150, color:'#00d4ff', glow:true, glowColor:'#00d4ff', bold:true},
-    {text:'CHANGE EVERYTHING', fontIdx:FONTS.findIndex(f=>f.name==='Rajdhani'), fontSize:80, color:'#ffffff', outline:true, outColor:'#00d4ff', outW:2}
-  ]},
-  { name:'Elegant Script', bg:'#111111', lines:[
-    {text:'My Story', fontIdx:FONTS.findIndex(f=>f.name==='Dancing Script'), fontSize:160, color:'#ffd700', glow:true, glowColor:'#ffd70066'},
-    {text:'BEGINS HERE', fontIdx:FONTS.findIndex(f=>f.name==='Josefin Sans'), fontSize:80, color:'#ffffff', bold:true}
-  ]},
-  { name:'Viral Red', bg:'#ff0000', lines:[
-    {text:'I TRIED THIS', fontIdx:FONTS.findIndex(f=>f.name==='Luckiest Guy'), fontSize:140, color:'#ffffff', shadow3d:true, bold:true},
-    {text:'FOR 30 DAYS', fontIdx:FONTS.findIndex(f=>f.name==='Luckiest Guy'), fontSize:120, color:'#ffff00', stroke:true, strokeColor:'#000000', strokeW:4}
-  ]},
-];
 
-function loadTemplate(tpl) {
-  snapshot();
-  selBg = tpl.bg; selBgGrad = null;
-  document.querySelectorAll('.bg-swatch').forEach(s=>s.classList.remove('active'));
-  lineData = tpl.lines.map(l => Object.assign(newLine(), l));
-  buildLineEditor(); regen();
-}
 
-function buildTemplates() {
-  const row = document.getElementById('templatesRow');
-  TEMPLATES.forEach(tpl => {
-    const btn = document.createElement('button');
-    btn.className = 'tpl-btn';
-    btn.textContent = tpl.name;
-    btn.onclick = () => loadTemplate(tpl);
-    row.appendChild(btn);
-  });
-}
 
 // ── Colors ───────────────────────────────────────────────────────────
 const TEXT_COLORS = ['#ffffff','#f5f5f5','#ffd700','#ffa500','#ff4444','#ff69b4','#00ffe7','#00ff88','#a78bfa','#60a5fa','#fb923c','#f472b6','#34d399','#facc15','#e879f9','#000000'];
@@ -1126,7 +1067,6 @@ async function copyCanvas() {
 }
 
 // ── Init ──────────────────────────────────────────────────────────────
-buildTemplates();
 buildColors();
 buildLineEditor();
 </script>
