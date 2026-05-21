@@ -80,6 +80,15 @@ header p{font-size:11px;color:var(--text2);letter-spacing:.04em}
 .input-row{display:flex;gap:8px;margin-bottom:16px}
 .input-row input{flex:1;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;outline:none;transition:border-color .2s}
 .input-row input:focus{border-color:var(--red)}
+#titleManual:focus{border-color:var(--red)!important}
+.line-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.line-row input{flex:1;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;outline:none;transition:border-color .2s;}
+.line-row input:focus{border-color:var(--red);}
+.line-row select{padding:9px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:11px;outline:none;cursor:pointer;max-width:160px;transition:border-color .2s;}
+.line-row select:focus{border-color:var(--red);}
+.line-num{font-size:11px;color:var(--text2);font-weight:700;min-width:18px;text-align:center;}
+.line-size{width:64px;padding:9px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:12px;font-weight:700;outline:none;text-align:center;transition:border-color .2s;}
+.line-size:focus{border-color:var(--red);}
 .input-row input::placeholder{color:#444}
 .gen-btn{padding:11px 22px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s,transform .1s}
 .gen-btn:hover{background:var(--red2)}
@@ -163,10 +172,27 @@ canvas{width:100%!important;height:100%!important;display:block}
     </div>
   </div>
 
-  <div class="flabel">video title</div>
-  <div class="input-row">
-    <input id="titleInput" type="text" placeholder="e.g.  10 Life Hacks That Changed Everything" maxlength="90" />
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div class="flabel" style="margin-bottom:0">video title</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:11px;color:var(--text2)" id="modeHint">auto split</span>
+      <div id="modeToggle" onclick="toggleMode()" style="width:36px;height:20px;border-radius:999px;background:var(--border);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
+        <div id="modeKnob" style="width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .2s;"></div>
+      </div>
+      <span style="font-size:11px;color:var(--text2)">manual</span>
+    </div>
+  </div>
+  <div id="autoInputWrap" class="input-row">
+    <input id="titleInput" type="text" placeholder="e.g. 10 Life Hacks That Changed Everything" maxlength="200" />
     <button class="gen-btn" onclick="generate()">Generate</button>
+  </div>
+  <div id="manualInputWrap" style="display:none;margin-bottom:16px;">
+    <div id="lineEditorWrap"></div>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <button onclick="addLine()" style="padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;">+ Add Line</button>
+      <button onclick="removeLine()" style="padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:12px;cursor:pointer;">− Remove</button>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-top:6px;">Each row = one line on thumbnail. Pick a different font per line.</div>
   </div>
 
   <div class="canvas-wrap">
@@ -476,7 +502,9 @@ const TEXT_COLORS = [
 
 const BG_OPTIONS = [];
 
-let selFont = 0, selColor = '#ffffff', selSize = 130, selAlign = 'center', selLines = 2, selLineSpacing = 1.12, selLetterSpacing = 0;
+let selFont = 0, selColor = '#ffffff', selSize = 130, selAlign = 'center', selLines = 2, selLineSpacing = 1.12, selLetterSpacing = 0, selManual = false;
+// Per-line data: [{text, fontIdx}]
+let lineData = [{text:'', fontIdx:0, fontSize:130}, {text:'', fontIdx:0, fontSize:130}];
 let filteredFonts = [...FONTS];
 
 function buildGrid() {
@@ -532,10 +560,79 @@ document.querySelectorAll('[data-lines]').forEach(p => {
 document.getElementById('titleInput').addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
 document.getElementById('titleInput').addEventListener('input', () => regen());
 
-function regen() { const t = document.getElementById('titleInput').value.trim(); if (t) drawThumbnail(t); }
-function generate() { const t = document.getElementById('titleInput').value.trim(); if (!t) { document.getElementById('titleInput').focus(); return; } drawThumbnail(t); }
+function buildFontOptions(selectedIdx) {
+  return FONTS.map((f, i) =>
+    `<option value="${i}" ${i === selectedIdx ? 'selected' : ''} style="font-family:${f.f}">${f.name}</option>`
+  ).join('');
+}
+
+function buildLineEditor() {
+  const wrap = document.getElementById('lineEditorWrap');
+  wrap.innerHTML = '';
+  lineData.forEach((ld, i) => {
+    const row = document.createElement('div');
+    row.className = 'line-row';
+    row.innerHTML = `<span class="line-num">L${i+1}</span>
+      <input type="text" placeholder="Line ${i+1} text…" value="${'${ld.text.replace(/"/g,"&quot;")}'}"
+        oninput="lineData[${i}].text=this.value;regen()" />
+      <select onchange="lineData[${i}].fontIdx=parseInt(this.value);regen()">${'${buildFontOptions(ld.fontIdx)}'}</select>
+      <input type="number" class="line-size" min="20" max="400" value="${'${ld.fontSize||130}'}"
+        title="Font size (px)"
+        oninput="lineData[${i}].fontSize=parseInt(this.value)||130;regen()" />`;
+    wrap.appendChild(row);
+  });
+}
+
+function addLine() {
+  if (lineData.length >= 6) return;
+  lineData.push({text:'', fontIdx:selFont, fontSize:selSize});
+  buildLineEditor(); regen();
+}
+
+function removeLine() {
+  if (lineData.length <= 1) return;
+  lineData.pop();
+  buildLineEditor(); regen();
+}
+
+function toggleMode() {
+  selManual = !selManual;
+  document.getElementById('autoInputWrap').style.display = selManual ? 'none' : 'flex';
+  document.getElementById('manualInputWrap').style.display = selManual ? 'block' : 'none';
+  document.getElementById('modeToggle').style.background = selManual ? 'var(--red)' : 'var(--border)';
+  document.getElementById('modeKnob').style.left = selManual ? '19px' : '3px';
+  document.getElementById('modeHint').style.color = selManual ? 'var(--text2)' : 'var(--red)';
+  if (selManual) { lineData = lineData.map(l => ({...l, fontIdx:selFont, fontSize:selSize})); buildLineEditor(); }
+  regen();
+}
+
+function regen() {
+  if (selManual) {
+    const hasText = lineData.some(l => l.text.trim());
+    if (hasText) drawThumbnailMultiFont();
+  } else {
+    const t = document.getElementById('titleInput').value.trim();
+    if (t) drawThumbnail(t);
+  }
+}
+function generate() {
+  if (selManual) {
+    const hasText = lineData.some(l => l.text.trim());
+    if (!hasText) return;
+    drawThumbnailMultiFont();
+  } else {
+    const t = document.getElementById('titleInput').value.trim();
+    if (!t) { document.getElementById('titleInput').focus(); return; }
+    drawThumbnail(t);
+  }
+}
 
 function splitTitle(title) {
+  // Manual mode — split by newlines exactly as user typed
+  if (selManual) {
+    return title.split('\n').map(l => l).filter(l => l.length > 0);
+  }
+  // Auto mode
   const words = title.split(' ');
   if (selLines === 1 || words.length <= 1) return [title];
   if (selLines === 2) {
@@ -606,9 +703,70 @@ function drawThumbnail(title) {
   document.getElementById('status').textContent = '✓ Ready · 1280×720 · ' + FONTS[selFont].name;
 }
 
+function drawThumbnailMultiFont() {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const W = 1280, H = 720;
+  canvas.width = W; canvas.height = H;
+  ctx.clearRect(0, 0, W, H);
+
+  const activeLines = lineData.filter(l => l.text.trim() !== '' || l.text === '');
+  const visibleLines = lineData;
+
+  // Per-line font sizes — use each line's own fontSize
+  const isDark = selColor === '#000000' || selColor === '#1a1a1a';
+  ctx.shadowColor = isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.85)';
+  ctx.shadowBlur = 18; ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3;
+
+  // Calculate total height using each line's own fontSize
+  const lineHeights = visibleLines.map(ld => (ld.fontSize || selSize) * selLineSpacing);
+  const totalH = lineHeights.reduce((a, b) => a + b, 0);
+  let cx = W / 2;
+  if (selAlign === 'left') cx = 80;
+  else if (selAlign === 'right') cx = W - 80;
+
+  // Build Y positions for each line
+  const lineYs = [];
+  let curY = H / 2 - totalH / 2;
+  visibleLines.forEach((ld, i) => {
+    const fs = ld.fontSize || selSize;
+    lineYs.push(curY + fs * 0.85);
+    curY += fs * selLineSpacing;
+  });
+
+  visibleLines.forEach((ld, i) => {
+    const fs = ld.fontSize || selSize;
+    const fontFamily = FONTS[ld.fontIdx] ? FONTS[ld.fontIdx].f : FONTS[selFont].f;
+    ctx.font = fs + 'px ' + fontFamily;
+    ctx.textAlign = selAlign;
+    ctx.fillStyle = selColor;
+    const y = lineYs[i];
+    const line = ld.text;
+    if (selLetterSpacing !== 0) {
+      const chars = line.split('');
+      const totalW = ctx.measureText(line).width + selLetterSpacing * (chars.length - 1);
+      let x = selAlign === 'center' ? cx - totalW/2 : selAlign === 'right' ? cx - totalW : cx;
+      ctx.textAlign = 'left';
+      chars.forEach(ch => { ctx.fillText(ch, x, y); x += ctx.measureText(ch).width + selLetterSpacing; });
+    } else {
+      ctx.fillText(line, cx, y);
+    }
+  });
+
+  ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+  ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(255,255,255,0.08)';
+  ctx.fillText('ThumbCraft', W - 22, H - 16);
+  document.getElementById('ph').style.display = 'none';
+  document.getElementById('dlBtn').disabled = false;
+  document.getElementById('cpyBtn').disabled = false;
+  document.getElementById('status').textContent = '✓ Ready · 1280×720 · per-line fonts';
+}
+
 function downloadPNG() {
   const c = document.getElementById('c');
-  const slug = document.getElementById('titleInput').value.trim().replace(/\s+/g, '-').toLowerCase().slice(0, 30) || 'thumbnail';
+  const rawTitle = selManual ? lineData.map(l=>l.text).join(' ') : document.getElementById('titleInput').value;
+  const slug = rawTitle.trim().replace(/[\s\n]+/g, '-').toLowerCase().slice(0, 30) || 'thumbnail';
   const a = document.createElement('a'); a.download = 'thumbnail-' + slug + '.png'; a.href = c.toDataURL('image/png'); a.click();
 }
 
