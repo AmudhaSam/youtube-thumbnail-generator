@@ -58,6 +58,10 @@ header p{font-size:12px;color:var(--text2);letter-spacing:.02em}
 /* Controls row */
 .row2col{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:20px}
 .ctrl-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.ctrl-box.collapsed .ctrl-body{display:none}
+.ctrl-box.collapsed{padding-bottom:12px}
+.ctrl-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.ctrl-header:hover .collapse-btn{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
 
 /* Pills */
 .sz-pill{padding:5px 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;cursor:pointer;transition:all .15s;font-weight:500;box-shadow:var(--shadow)}
@@ -84,6 +88,11 @@ header p{font-size:12px;color:var(--text2);letter-spacing:.02em}
 
 /* Line card */
 .line-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:all .2s;box-shadow:var(--shadow)}
+.line-card.collapsed .line-row2,.line-card.collapsed .line-row3,.line-card.collapsed .line-row4{display:none}
+.line-card.collapsed{padding-bottom:14px}
+.collapse-btn{width:22px;height:22px;border-radius:4px;border:1px solid var(--border);background:var(--surface2);color:var(--text3);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;line-height:1}
+.collapse-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.line-card.collapsed .collapse-btn{background:var(--accent-light);color:var(--accent);border-color:rgba(79,70,229,.3)}
 .line-card:hover{border-color:var(--border2);box-shadow:var(--shadow-md)}
 .line-row1{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
 .line-num{font-size:11px;color:var(--accent);font-weight:700;min-width:22px;text-align:center;flex-shrink:0;background:var(--accent-light);border:1px solid rgba(79,70,229,.2);border-radius:5px;padding:2px 5px}
@@ -241,22 +250,28 @@ canvas{display:block;width:100%;height:auto}
 
   <!-- GLOBAL CONTROLS -->
   <div class="row2col">
-    <div class="ctrl-box">
-      <div class="flabel">alignment</div>
-      <div class="size-row">
-        <div class="sz-pill active" data-align="center">Center</div>
-        <div class="sz-pill" data-align="left">Left</div>
-        <div class="sz-pill" data-align="right">Right</div>
+    <div class="ctrl-box" id="textCtrlBox">
+      <div class="ctrl-header" onclick="toggleCtrl()">
+        <div class="flabel" style="margin-bottom:0;flex:1">text settings</div>
+        <button class="collapse-btn" id="textCtrlBtn" title="Collapse / expand">▾</button>
       </div>
-      <div class="flabel mt">line spacing</div>
-      <div class="slider-row">
-        <input type="range" id="lineSpacing" min="0.8" max="2.5" step="0.05" value="1.12" oninput="selLineSpacing=parseFloat(this.value);document.getElementById('lsVal').textContent=parseFloat(this.value).toFixed(2);regen()"/>
-        <span class="slider-val" id="lsVal">1.12</span>
-      </div>
-      <div class="flabel mt">letter spacing</div>
-      <div class="slider-row">
-        <input type="range" id="letterSpacing" min="-10" max="60" step="1" value="0" oninput="selLetterSpacing=parseInt(this.value);document.getElementById('letVal').textContent=this.value+'px';regen()"/>
-        <span class="slider-val" id="letVal">0px</span>
+      <div class="ctrl-body" id="textCtrlBody">
+        <div class="flabel mt">alignment</div>
+        <div class="size-row">
+          <div class="sz-pill active" data-align="center">Center</div>
+          <div class="sz-pill" data-align="left">Left</div>
+          <div class="sz-pill" data-align="right">Right</div>
+        </div>
+        <div class="flabel mt">line spacing</div>
+        <div class="slider-row">
+          <input type="range" id="lineSpacing" min="0.8" max="2.5" step="0.05" value="1.12" oninput="selLineSpacing=parseFloat(this.value);document.getElementById('lsVal').textContent=parseFloat(this.value).toFixed(2);regen()"/>
+          <span class="slider-val" id="lsVal">1.12</span>
+        </div>
+        <div class="flabel mt">letter spacing</div>
+        <div class="slider-row">
+          <input type="range" id="letterSpacing" min="-10" max="60" step="1" value="0" oninput="selLetterSpacing=parseInt(this.value);document.getElementById('letVal').textContent=this.value+'px';regen()"/>
+          <span class="slider-val" id="letVal">0px</span>
+        </div>
       </div>
     </div>
   </div>
@@ -678,7 +693,7 @@ function newLine(overrides={}) {
     glow:false, glowColor:'',
     stroke:false, strokeColor:'#000000', strokeW:3,
     textShadow:false, tshColor:'#000000', tshX:4, tshY:4, tshBlur:8,
-    caseMode:'none', offsetY:0
+    caseMode:'none', offsetY:0, collapsed:false
   }, overrides);
 }
 
@@ -784,6 +799,13 @@ function buildFontOptions(selectedIdx) {
 }
 
 // ── Line editor ──────────────────────────────────────────────────────
+function toggleCtrl() {
+  const box = document.getElementById('textCtrlBox');
+  const btn = document.getElementById('textCtrlBtn');
+  box.classList.toggle('collapsed');
+  btn.innerHTML = box.classList.contains('collapsed') ? '▸' : '▾';
+}
+
 function buildLineEditor() {
   const wrap = document.getElementById('lineEditorWrap');
   wrap.innerHTML = '';
@@ -829,6 +851,20 @@ function buildLineEditor() {
     const dup = document.createElement('button'); dup.className='mini-btn'; dup.title='Duplicate'; dup.textContent='⧉';
     dup.onclick = (function(idx){ return function(){ snapshot(); if(lineData.length>=8)return; lineData.splice(idx+1,0,JSON.parse(JSON.stringify(lineData[idx]))); buildLineEditor(); regen(); }; })(i);
     actions.appendChild(dup);
+
+    // Collapse button added to actions BEFORE row1 is assembled
+    const colBtn = document.createElement('button');
+    colBtn.className = 'collapse-btn';
+    colBtn.title = 'Collapse / expand styling';
+    colBtn.innerHTML = ld.collapsed ? '▸' : '▾';
+    colBtn.onclick = (function(idx, btn, cd) {
+      return function() {
+        lineData[idx].collapsed = !lineData[idx].collapsed;
+        cd.classList.toggle('collapsed', lineData[idx].collapsed);
+        btn.innerHTML = lineData[idx].collapsed ? '▸' : '▾';
+      };
+    })(i, colBtn, card);
+    actions.appendChild(colBtn);
 
     row1.appendChild(lbl); row1.appendChild(textInput); row1.appendChild(fontSel); row1.appendChild(sizeInput); row1.appendChild(actions);
 
@@ -921,6 +957,7 @@ function buildLineEditor() {
     const tshB=mkSlider(0,60,ld.tshBlur||8,1,(function(idx){return function(v){lineData[idx].tshBlur=v;regen();};})(i),'blur');
     row4.appendChild(btnTS); row4.appendChild(tshPick); row4.appendChild(tshX); row4.appendChild(tshY); row4.appendChild(tshB);
 
+    if (ld.collapsed) card.classList.add('collapsed');
     card.appendChild(row1); card.appendChild(row2); card.appendChild(row3); card.appendChild(row4);
     wrap.appendChild(card);
   });
