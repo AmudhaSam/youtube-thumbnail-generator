@@ -572,13 +572,35 @@ function buildLineEditor() {
   lineData.forEach((ld, i) => {
     const row = document.createElement('div');
     row.className = 'line-row';
-    row.innerHTML = `<span class="line-num">L${i+1}</span>
-      <input type="text" placeholder="Line ${i+1} text…" value="${'${ld.text.replace(/"/g,"&quot;")}'}"
-        oninput="lineData[${i}].text=this.value;regen()" />
-      <select onchange="lineData[${i}].fontIdx=parseInt(this.value);regen()">${'${buildFontOptions(ld.fontIdx)}'}</select>
-      <input type="number" class="line-size" min="20" max="400" value="${'${ld.fontSize||130}'}"
-        title="Font size (px)"
-        oninput="lineData[${i}].fontSize=parseInt(this.value)||130;regen()" />`;
+
+    const textInput = document.createElement('input');
+    textInput.type = 'text';
+    textInput.placeholder = 'Line ' + (i+1) + ' text…';
+    textInput.value = ld.text;
+    textInput.style.cssText = 'flex:1;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;outline:none;';
+    textInput.oninput = (function(idx){ return function(){ lineData[idx].text = this.value; regen(); }; })(i);
+
+    const sel = document.createElement('select');
+    sel.style.cssText = 'padding:9px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:11px;outline:none;cursor:pointer;max-width:160px;';
+    sel.innerHTML = buildFontOptions(ld.fontIdx);
+    sel.onchange = (function(idx){ return function(){ lineData[idx].fontIdx = parseInt(this.value); regen(); }; })(i);
+
+    const sizeInput = document.createElement('input');
+    sizeInput.type = 'number';
+    sizeInput.className = 'line-size';
+    sizeInput.min = 20; sizeInput.max = 400;
+    sizeInput.value = ld.fontSize || 130;
+    sizeInput.title = 'Font size (px)';
+    sizeInput.oninput = (function(idx){ return function(){ lineData[idx].fontSize = parseInt(this.value) || 130; regen(); }; })(i);
+
+    const label = document.createElement('span');
+    label.className = 'line-num';
+    label.textContent = 'L' + (i+1);
+
+    row.appendChild(label);
+    row.appendChild(textInput);
+    row.appendChild(sel);
+    row.appendChild(sizeInput);
     wrap.appendChild(row);
   });
 }
