@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YouTube Thumbnail Generator — Free</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&family=Oswald:wght@700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1f1f1f;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --text2: #999;
+    --red: #e63946;
+    --red-dark: #b52b36;
+    --accent: #ffd166;
+    --radius: 10px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 80px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: var(--red);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon svg { width: 22px; height: 22px; fill: white; }
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+  header p {
+    font-size: 13px;
+    color: var(--text2);
+    letter-spacing: 0.04em;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 760px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .field-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .input-row input {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-row input:focus { border-color: var(--red); }
+  .input-row input::placeholder { color: #555; }
+
+  .gen-btn {
+    padding: 12px 26px;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .gen-btn:hover { background: var(--red-dark); }
+  .gen-btn:active { transform: scale(0.97); }
+
+  .style-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .pill {
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .pill:hover { border-color: #555; color: var(--text); }
+  .pill.active { background: var(--red); color: white; border-color: var(--red); }
+
+  .canvas-wrap {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #111;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 16px;
+  }
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+  .canvas-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #444;
+    font-size: 13px;
+    pointer-events: none;
+  }
+  .canvas-placeholder svg { width: 48px; height: 48px; opacity: 0.3; }
+
+  .bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dl-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .dl-btn:hover { background: #2a2a2a; }
+  .dl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .dl-btn svg { width: 15px; height: 15px; }
+
+  .status {
+    flex: 1;
+    text-align: right;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .badge-free {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #1a3a1a;
+    color: #4caf50;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-left: 8px;
+  }
+
+  footer {
+    margin-top: 32px;
+    font-size: 12px;
+    color: #444;
+    text-align: center;
+  }
+  footer a { color: #666; text-decoration: none; }
+  footer a:hover { color: var(--text2); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.1 2.8 12 2.8 12 2.8s-4.1 0-6.8.1c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.1.3 4.3.3 4.3s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.3 21.8 12 21.8 12 21.8s4.1 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.3v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg>
+    </div>
+    <span class="logo-text">ThumbCraft</span>
+    <span class="badge-free">100% FREE</span>
+  </div>
+  <p>Generate stunning YouTube thumbnails — no account, no API key, no cost</p>
+</header>
+
+<div class="card">
+  <div class="field-label">Choose a style</div>
+  <div class="style-row" id="pills">
+    <div class="pill active" data-style="cinematic">🎬 Cinematic</div>
+    <div class="pill" data-style="gaming">🎮 Gaming / Neon</div>
+    <div class="pill" data-style="minimal">✦ Minimal</div>
+    <div class="pill" data-style="dramatic">🔥 Dramatic Bold</div>
+    <div class="pill" data-style="tech">⚡ Tech / Futuristic</div>
+    <div class="pill" data-style="nature">🌿 Nature / Calm</div>
+    <div class="pill" data-style="finance">💰 Finance / Business</div>
+    <div class="pill" data-style="horror">💀 Dark / Horror</div>
+  </div>
+
+  <div class="field-label">Video title</div>
+  <div class="input-row">
+    <input id="titleInput" type="text" placeholder="e.g.  Top 10 Life Hacks That Changed My Life" maxlength="90" />
+    <button class="gen-btn" onclick="generate()">Generate</button>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="c" width="1280" height="720"></canvas>
+    <div class="canvas-placeholder" id="ph">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      Your thumbnail preview will appear here
+    </div>
+  </div>
+
+  <div class="bottom-row">
+    <button class="dl-btn" id="dlBtn" disabled onclick="downloadPNG()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download PNG
+    </button>
+    <button class="dl-btn" id="cpyBtn" disabled onclick="copyCanvas()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      Copy Image
+    </button>
+    <span class="status" id="status">1280 × 720 px · ready</span>
+  </div>
+</div>
+
+<footer>
+  Built with ❤ · No AI API · No server · Pure browser · <a href="https://github.com" target="_blank">Deploy free on GitHub Pages</a>
+</footer>
+
+<script>
+// ─── Style Definitions ───────────────────────────────────────────────
+const STYLES = {
+  cinematic: {
+    bgColors: ['#0a0a1a','#1a1030','#0d1a2a'],
+    accent: '#e8c46a',
+    text: '#ffffff',
+    shadow: '#000000',
+    pattern: 'diagonal',
+    overlays: [{shape:'circle',x:0.85,y:0.15,r:0.55,color:'#3a2060',alpha:0.45},{shape:'circle',x:0.1,y:0.85,r:0.3,color:'#1a3060',alpha:0.3}],
+    font: "'Bebas Neue', Impact, sans-serif",
+    subFont: "'Oswald', sans-serif",
+    layout: 'center',
+    accentBar: true,
+    vignette: true,
+  },
+  gaming: {
+    bgColors: ['#050510','#0d0520','#150530'],
+    accent: '#00ffe7',
+    text: '#ffffff',
+    shadow: '#00ffe7',
+    pattern: 'grid',
+    overlays: [{shape:'circle',x:0.8,y:0.5,r:0.7,color:'#7b00ff',alpha:0.25},{shape:'circle',x:0.2,y:0.5,r:0.5,color:'#ff0080',alpha:0.15}],
+    font: "'Bebas Neue', Impact, sans-serif",
+    subFont: "'Oswald', sans-serif",
+    layout: 'left',
+    neonGlow: true,
+    vignette: false,
+  },
+  minimal: {
+    bgColors: ['#f8f5f0','#f0ece6','#e8e4de'],
+    accent: '#c0392b',
+    text: '#1a1a1a',
+    shadow: 'rgba(0,0,0,0.1)',
+    pattern: 'none',
+    overlays: [{shape:'rect',x:0,y:0.75,w:1,h:0.06,color:'#1a1a1a',alpha:1}],
+    font: "'Oswald', Impact, sans-serif",
+    subFont: "'Montserrat', sans-serif",
+    layout: 'left',
+    accentBar: false,
+    vignette: false,
+    darkText: true,
+  },
+  dramatic: {
+    bgColors: ['#1a0000','#3a0808','#200000'],
+    accent: '#ff4500',
+    text: '#ffffff',
+    shadow: '#ff0000',
+    pattern: 'burst',
+    overlays: [{shape:'circle',x:0.5,y:0.5,r:1.2,color:'#ff2200',alpha:0.08}],
+    font: "'Bebas Neue', Impact, sans-serif",
+    subFont: "'Oswald', sans-serif",
+    layout: 'center',
+    neonGlow: false,
+    vignette: true,
+    accentBar: true,
+  },
+  tech: {
+    bgColors: ['#020810','#051020','#030c18'],
+    accent: '#00d4ff',
+    text: '#ffffff',
+    shadow: '#003a5a',
+    pattern: 'circuit',
+    overlays: [{shape:'rect',x:0.5,y:0,w:0.5,h:1,color:'#00d4ff',alpha:0.03}],
+    font: "'Oswald', 'Bebas Neue', Impact, sans-serif",
+    subFont: "'Montserrat', sans-serif",
+    layout: 'left',
+    vignette: true,
+    accentBar: true,
+  },
+  nature: {
+    bgColors: ['#0d1f0d','#152b10','#0a1a0a'],
+    accent: '#7bc67e',
+    text: '#ffffff',
+    shadow: '#000000',
+    pattern: 'dots',
+    overlays: [{shape:'circle',x:0.85,y:0.2,r:0.5,color:'#2d6a2d',alpha:0.4},{shape:'circle',x:0.1,y:0.8,r:0.4,color:'#1a4a1a',alpha:0.3}],
+    font: "'Bebas Neue', Impact, sans-serif",
+    subFont: "'Montserrat', sans-serif",
+    layout: 'center',
+    vignette: true,
+    accentBar: true,
+  },
+  finance: {
+    bgColors: ['#0a0f1a','#0f1825','#080c14'],
+    accent: '#ffd700',
+    text: '#ffffff',
+    shadow: '#000000',
+    pattern: 'lines',
+    overlays: [{shape:'rect',x:0,y:0,w:0.45,h:1,color:'#ffd700',alpha:0.04}],
+    font: "'Oswald', 'Bebas Neue', Impact, sans-serif",
+    subFont: "'Montserrat', sans-serif",
+    layout: 'left',
+    vignette: true,
+    accentBar: true,
+  },
+  horror: {
+    bgColors: ['#000000','#0a0005','#050000'],
+    accent: '#cc0000',
+    text: '#e0e0e0',
+    shadow: '#cc0000',
+    pattern: 'scratch',
+    overlays: [{shape:'circle',x:0.5,y:0.4,r:0.8,color:'#660000',alpha:0.2}],
+    font: "'Bebas Neue', Impact, sans-serif",
+    subFont: "'Oswald', sans-serif",
+    layout: 'center',
+    vignette: true,
+    accentBar: false,
+    neonGlow: true,
+  }
+};
+
+// ─── Keyword → theme intelligence ─────────────────────────────────────
+const KEYWORD_MAP = {
+  gaming:  ['game','gaming','fps','minecraft','roblox','fortnite','valorant','cod','gta','pubg','steam','console','xbox','playstation','esport','twitch'],
+  tech:    ['ai','python','javascript','coding','programmer','tech','software','app','startup','robot','machine learning','chatgpt','arduino','linux','cyber'],
+  finance: ['money','invest','stock','crypto','bitcoin','wealth','rich','income','profit','trading','finance','dollar','earn','passive'],
+  horror:  ['horror','scary','haunted','ghost','dark','death','murder','evil','demon','monster','nightmare','creepy','terrifying'],
+  nature:  ['nature','travel','forest','ocean','mountain','hiking','wildlife','planet','earth','green','garden','vegan','yoga','meditation','calm','peace'],
+  dramatic:['viral','shocking','insane','unbelievable','world record','extreme','crazy','wild','epic','mind-blowing','challenge','worst','best ever'],
+  minimal: ['guide','tutorial','how to','learn','course','tips','review','explained','simple','beginner','easy','step by step'],
+};
+
+function detectStyle(title) {
+  const t = title.toLowerCase();
+  let best = null, bestScore = 0;
+  for (const [style, words] of Object.entries(KEYWORD_MAP)) {
+    const score = words.filter(w => t.includes(w)).length;
+    if (score > bestScore) { bestScore = score; best = style; }
+  }
+  return best || selectedStyle;
+}
+
+// ─── Emoji mapping ─────────────────────────────────────────────────────
+const TOPIC_EMOJI = {
+  gaming:['🎮','⚔️','🕹️','🏆','💥'],
+  tech:['💻','🤖','⚡','🔥','🛸'],
+  finance:['💰','📈','🤑','💎','🏦'],
+  horror:['💀','👁️','🩸','🔪','☠️'],
+  nature:['🌿','🌍','🏔️','🌊','🌲'],
+  dramatic:['🔥','😱','💥','⚡','🚀'],
+  minimal:['✦','→','▶','◆','✓'],
+  cinematic:['🎬','🎥','⭐','🌟','✨'],
+};
+
+function getEmoji(style) {
+  const arr = TOPIC_EMOJI[style] || TOPIC_EMOJI.cinematic;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// ─── Text splitting ────────────────────────────────────────────────────
+function splitTitle(title) {
+  const words = title.split(' ');
+  if (words.length <= 3) return [title.toUpperCase()];
+  if (words.length <= 6) {
+    const mid = Math.ceil(words.length / 2);
+    return [words.slice(0, mid).join(' ').toUpperCase(), words.slice(mid).join(' ').toUpperCase()];
+  }
+  const third = Math.ceil(words.length / 2);
+  return [words.slice(0, third).join(' ').toUpperCase(), words.slice(third).join(' ').toUpperCase()];
+}
+
+// ─── Canvas drawing ────────────────────────────────────────────────────
+let selectedStyle = 'cinematic';
+
+function drawThumbnail(title, styleName) {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const W = 1280, H = 720;
+  canvas.width = W; canvas.height = H;
+
+  const S = STYLES[styleName] || STYLES.cinematic;
+
+  // Background gradient
+  const grd = ctx.createLinearGradient(0, 0, W, H);
+  grd.addColorStop(0, S.bgColors[0]);
+  grd.addColorStop(0.5, S.bgColors[1] || S.bgColors[0]);
+  grd.addColorStop(1, S.bgColors[2] || S.bgColors[0]);
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  // Overlay shapes
+  S.overlays.forEach(o => {
+    ctx.save();
+    ctx.globalAlpha = o.alpha;
+    ctx.fillStyle = o.color;
+    if (o.shape === 'circle') {
+      ctx.beginPath();
+      ctx.arc(o.x * W, o.y * H, o.r * Math.max(W, H) * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (o.shape === 'rect') {
+      ctx.fillRect(o.x * W, o.y * H, (o.w || 1) * W, (o.h || 1) * H);
+    }
+    ctx.restore();
+  });
+
+  // Patterns
+  ctx.save();
+  ctx.globalAlpha = 0.07;
+  ctx.strokeStyle = S.accent;
+  ctx.lineWidth = 1;
+  if (S.pattern === 'grid') {
+    for (let x = 0; x < W; x += 70) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 0; y < H; y += 70) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  } else if (S.pattern === 'dots') {
+    ctx.fillStyle = S.accent;
+    for (let x = 40; x < W; x += 60) for (let y = 40; y < H; y += 60) {
+      ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (S.pattern === 'diagonal') {
+    for (let i = -H; i < W + H; i += 80) {
+      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i + H, H); ctx.stroke();
+    }
+  } else if (S.pattern === 'lines') {
+    for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  } else if (S.pattern === 'circuit') {
+    ctx.strokeStyle = S.accent;
+    for (let i = 0; i < 18; i++) {
+      const sx = Math.random()*W, sy = Math.random()*H;
+      const ex = sx + (Math.random()-0.5)*400;
+      ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,sy); ctx.lineTo(ex, sy+(Math.random()-0.5)*200); ctx.stroke();
+      ctx.beginPath(); ctx.arc(ex, sy, 4, 0, Math.PI*2); ctx.stroke();
+    }
+  } else if (S.pattern === 'scratch') {
+    ctx.lineWidth = 0.8;
+    for (let i = 0; i < 30; i++) {
+      const sx = Math.random()*W;
+      ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx + (Math.random()-0.5)*60, H); ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  // Vignette
+  if (S.vignette) {
+    const vig = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.9);
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, 'rgba(0,0,0,0.75)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // Layout
+  const lines = splitTitle(title);
+  const emoji = getEmoji(styleName);
+  const isLeft = S.layout === 'left';
+  const cx = isLeft ? 90 : W / 2;
+  const textAlign = isLeft ? 'left' : 'center';
+
+  // Font sizes based on line count and length
+  const maxLen = Math.max(...lines.map(l => l.length));
+  let fs = maxLen > 22 ? 110 : maxLen > 16 ? 130 : 150;
+  if (lines.length > 2) fs = Math.min(fs, 100);
+
+  ctx.textAlign = textAlign;
+
+  // Neon glow effect
+  if (S.neonGlow) {
+    ctx.save();
+    ctx.shadowColor = S.accent;
+    ctx.shadowBlur = 40;
+    ctx.globalAlpha = 0.5;
+    ctx.font = `${fs}px ${S.font}`;
+    ctx.fillStyle = S.accent;
+    const totalH = lines.length * (fs * 1.05);
+    const startY = H/2 - totalH/2 + fs * 0.85;
+    lines.forEach((line, i) => ctx.fillText(line, cx, startY + i * fs * 1.05));
+    ctx.restore();
+  }
+
+  // Main text
+  ctx.font = `${fs}px ${S.font}`;
+  ctx.textAlign = textAlign;
+  ctx.fillStyle = S.text;
+  ctx.shadowColor = S.shadow;
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3;
+
+  const totalH = lines.length * (fs * 1.05);
+  const startY = H/2 - totalH/2 + fs * 0.85;
+  lines.forEach((line, i) => ctx.fillText(line, cx, startY + i * fs * 1.05));
+
+  ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+
+  // Accent bar
+  if (S.accentBar) {
+    const barY = startY + totalH + 12;
+    if (isLeft) {
+      ctx.fillStyle = S.accent;
+      ctx.fillRect(90, barY, 120, 6);
+    } else {
+      ctx.fillStyle = S.accent;
+      ctx.fillRect(W/2 - 60, barY, 120, 6);
+    }
+  }
+
+  // Emoji decoration
+  ctx.font = `${isLeft ? 80 : 72}px serif`;
+  ctx.textAlign = isLeft ? 'right' : 'center';
+  if (isLeft) {
+    ctx.fillText(emoji, W - 120, H/2 + 40);
+  } else {
+    ctx.fillText(emoji, W/2, startY - fs * 1.1);
+  }
+
+  // Minimal dark bar for minimal style
+  if (styleName === 'minimal') {
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, H * 0.87, W, H * 0.13);
+    ctx.font = `bold 28px 'Montserrat', sans-serif`;
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'right';
+    ctx.fillText('▶  WATCH NOW', W - 60, H * 0.87 + 52);
+  }
+
+  // Corner watermark
+  ctx.font = `bold 22px 'Montserrat', sans-serif`;
+  ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.fillText('ThumbCraft', W - 30, H - 22);
+
+  document.getElementById('ph').style.display = 'none';
+}
+
+// ─── Event handlers ────────────────────────────────────────────────────
+document.querySelectorAll('.pill').forEach(p => {
+  p.onclick = () => {
+    document.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+    selectedStyle = p.dataset.style;
+  };
+});
+
+document.getElementById('titleInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') generate();
+});
+
+function generate() {
+  const title = document.getElementById('titleInput').value.trim();
+  if (!title) { document.getElementById('titleInput').focus(); return; }
+  const autoStyle = detectStyle(title);
+  const useStyle = autoStyle !== selectedStyle && document.querySelectorAll('.pill.active')[0]?.dataset.style === selectedStyle
+    ? autoStyle : selectedStyle;
+
+  // Highlight detected style pill
+  document.querySelectorAll('.pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.style === useStyle);
+  });
+  selectedStyle = useStyle;
+
+  drawThumbnail(title, useStyle);
+  document.getElementById('dlBtn').disabled = false;
+  document.getElementById('cpyBtn').disabled = false;
+  document.getElementById('status').textContent = '✓ Done · 1280 × 720 px';
+}
+
+function downloadPNG() {
+  const canvas = document.getElementById('c');
+  const title = document.getElementById('titleInput').value.trim().replace(/\s+/g, '-').toLowerCase().slice(0, 30) || 'thumbnail';
+  const link = document.createElement('a');
+  link.download = `thumbnail-${title}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+async function copyCanvas() {
+  try {
+    const canvas = document.getElementById('c');
+    canvas.toBlob(async blob => {
+      await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+      const btn = document.getElementById('cpyBtn');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+      setTimeout(() => { btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Image`; }, 2000);
+    });
+  } catch(e) { alert('Copy not supported in this browser. Use Download instead.'); }
+}
+</script>
+</body>
+</html>
