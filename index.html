@@ -137,7 +137,7 @@ header p{font-size:12px;color:var(--text2);letter-spacing:.02em}
 .mini-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
 
 /* Add/remove buttons */
-.add-btns{display:flex;gap:8px;margin-top:8px;margin-bottom:18px}
+.add-btns{display:flex;gap:6px;margin-top:8px;margin-bottom:18px;align-items:center;flex-wrap:wrap}
 .add-btns button{padding:8px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
 .add-btns button:first-child{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
 .add-btns button:first-child:hover{background:var(--accent);color:#fff}
@@ -159,7 +159,6 @@ canvas{display:block;width:100%;height:auto}
 .zoom-row button:hover{border-color:var(--accent);color:var(--accent)}
 
 /* Bottom bar */
-.bottom-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1.5px solid var(--border)}
 .dl-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
 .dl-btn:hover{background:var(--surface3);border-color:var(--border2)}
 .dl-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -216,6 +215,30 @@ canvas{display:block;width:100%;height:auto}
     </div>
   </div>
 
+  <!-- LINES -->
+  <div class="flabel">lines</div>
+  <div id="lineEditorWrap"></div>
+  <div class="add-btns">
+    <button onclick="addLine()">+ Add Line</button>
+    <button onclick="removeLine()" style="color:var(--text2)" title="Remove last line (Ctrl+Z to undo)">− Remove</button>
+    <div style="width:1px;height:28px;background:var(--border);margin:0 4px;flex-shrink:0"></div>
+    <button class="dl-btn primary" id="dlBtn" disabled onclick="downloadPNG()" title="Download PNG">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      PNG
+    </button>
+    <button class="dl-btn" id="dlJpgBtn" disabled onclick="downloadJPG()" title="Download JPG">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      JPG
+    </button>
+    <button class="dl-btn" id="cpyBtn" disabled onclick="copyCanvas()" title="Copy to clipboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      Copy
+    </button>
+    <button class="dl-btn" onclick="undoFn()" title="Undo (Ctrl+Z)">↩</button>
+    <button class="dl-btn" onclick="redoFn()" title="Redo (Ctrl+Y)">↪</button>
+    <span style="font-size:11px;color:var(--text3);margin-left:4px" id="status">1280 × 720 px</span>
+  </div>
+
   <!-- GLOBAL CONTROLS -->
   <div class="row2col">
     <div class="ctrl-box">
@@ -225,25 +248,17 @@ canvas{display:block;width:100%;height:auto}
         <div class="sz-pill" data-align="left">Left</div>
         <div class="sz-pill" data-align="right">Right</div>
       </div>
-      <div class="flabel" class="mt">line spacing</div>
+      <div class="flabel mt">line spacing</div>
       <div class="slider-row">
         <input type="range" id="lineSpacing" min="0.8" max="2.5" step="0.05" value="1.12" oninput="selLineSpacing=parseFloat(this.value);document.getElementById('lsVal').textContent=parseFloat(this.value).toFixed(2);regen()"/>
         <span class="slider-val" id="lsVal">1.12</span>
       </div>
-      <div class="flabel" class="mt">letter spacing</div>
+      <div class="flabel mt">letter spacing</div>
       <div class="slider-row">
         <input type="range" id="letterSpacing" min="-10" max="60" step="1" value="0" oninput="selLetterSpacing=parseInt(this.value);document.getElementById('letVal').textContent=this.value+'px';regen()"/>
         <span class="slider-val" id="letVal">0px</span>
       </div>
     </div>
-  </div>
-
-  <!-- LINES -->
-  <div class="flabel">lines</div>
-  <div id="lineEditorWrap"></div>
-  <div class="add-btns">
-    <button onclick="addLine()">+ Add Line</button>
-    <button onclick="removeLine()" style="color:var(--text2)" title="Remove last line (Ctrl+Z to undo)">− Remove Last</button>
   </div>
 
   <!-- CANVAS -->
@@ -263,24 +278,6 @@ canvas{display:block;width:100%;height:auto}
     </div>
   </div>
 
-  <!-- BOTTOM -->
-  <div class="bottom-row">
-    <button class="dl-btn primary" id="dlBtn" disabled onclick="downloadPNG()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      PNG
-    </button>
-    <button class="dl-btn" id="dlJpgBtn" disabled onclick="downloadJPG()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      JPG
-    </button>
-    <button class="dl-btn" id="cpyBtn" disabled onclick="copyCanvas()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-      Copy
-    </button>
-    <button class="dl-btn" onclick="undoFn()" title="Undo (Ctrl+Z)" style="font-size:14px">↩</button>
-    <button class="dl-btn" onclick="redoFn()" title="Redo (Ctrl+Y)" style="font-size:14px">↪</button>
-    <span class="status" id="status">1280 × 720 px</span>
-  </div>
 </div>
 
 <script>
@@ -1143,10 +1140,13 @@ function getExportCanvas(forJpg) {
   ox.drawImage(c,0,0,1280,720);
   return off;
 }
+function downloadPNG() {
+  const slug=lineData.map(l=>l.text).join(' ').trim().replace(/[\s\n]+/g,'-').toLowerCase().slice(0,30)||'thumbnail';
+  const a=document.createElement('a'); a.download='thumbnail-'+slug+'.png'; a.href=getExportCanvas(false).toDataURL('image/png'); a.click();
+}
 function downloadJPG() {
-  const a=document.createElement('a');
-  const slug=lineData.map(l=>l.text).join(' ').trim().replace(/[\s]+/g,'-').toLowerCase().slice(0,30)||'thumbnail';
-  a.download='thumbnail-'+slug+'.jpg'; a.href=getExportCanvas().toDataURL('image/jpeg',0.92); a.click();
+  const slug=lineData.map(l=>l.text).join(' ').trim().replace(/[\s\n]+/g,'-').toLowerCase().slice(0,30)||'thumbnail';
+  const a=document.createElement('a'); a.download='thumbnail-'+slug+'.jpg'; a.href=getExportCanvas(true).toDataURL('image/jpeg',0.95); a.click();
 }
 async function copyCanvas() {
   try {
