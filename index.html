@@ -516,8 +516,8 @@ const TEXT_COLORS = [
 let selColor = '#ffffff', selAlign = 'center', selLineSpacing = 1.12, selLetterSpacing = 0;
 const DEF_SIZE = 130;
 // Per-line data: [{text, fontIdx}]
-let lineData = [{text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, highlight:false, hlColor:'#ffff00', outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3},
-                {text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, highlight:false, hlColor:'#ffff00', outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3}];
+let lineData = [{text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3},
+                {text:'', fontIdx:0, fontSize:130, color:'#ffffff', bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3}];
 let filteredFonts = [...FONTS];
 
 function buildColors() {
@@ -547,15 +547,28 @@ function buildFontOptions(selectedIdx) {
   ).join('');
 }
 
+function mkColorPick(initVal, onchange) {
+  const wrap = document.createElement('label');
+  wrap.style.cssText = 'position:relative;cursor:pointer;display:inline-flex;vertical-align:middle;';
+  const swatch = document.createElement('div');
+  swatch.className = 'fx-color';
+  swatch.style.background = initVal;
+  const picker = document.createElement('input');
+  picker.type = 'color'; picker.value = initVal;
+  picker.style.cssText = 'position:absolute;width:0;height:0;opacity:0;';
+  picker.oninput = function() { swatch.style.background = this.value; onchange(this.value); };
+  wrap.appendChild(swatch); wrap.appendChild(picker);
+  return wrap;
+}
+
 function buildLineEditor() {
   const wrap = document.getElementById('lineEditorWrap');
   wrap.innerHTML = '';
   lineData.forEach((ld, i) => {
-    // Outer card wrapper
     const card = document.createElement('div');
     card.style.cssText = 'background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:10px;';
 
-    // ── Row 1: label + text input + font select + size ──
+    // ── Row 1: label + text + font + size ──────────────────────────
     const row1 = document.createElement('div');
     row1.style.cssText = 'display:flex;gap:8px;align-items:center;';
 
@@ -570,10 +583,10 @@ function buildLineEditor() {
     textInput.style.cssText = 'flex:1;padding:8px 10px;background:var(--bg,#0d0d0d);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;outline:none;min-width:0;';
     textInput.oninput = (function(idx){ return function(){ lineData[idx].text = this.value; regen(); }; })(i);
 
-    const sel = document.createElement('select');
-    sel.style.cssText = 'padding:8px 6px;background:var(--bg,#0d0d0d);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;outline:none;cursor:pointer;max-width:150px;';
-    sel.innerHTML = buildFontOptions(ld.fontIdx);
-    sel.onchange = (function(idx){ return function(){ lineData[idx].fontIdx = parseInt(this.value); regen(); }; })(i);
+    const fontSel = document.createElement('select');
+    fontSel.style.cssText = 'padding:8px 6px;background:var(--bg,#0d0d0d);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;outline:none;cursor:pointer;max-width:150px;';
+    fontSel.innerHTML = buildFontOptions(ld.fontIdx);
+    fontSel.onchange = (function(idx){ return function(){ lineData[idx].fontIdx = parseInt(this.value); regen(); }; })(i);
 
     const sizeInput = document.createElement('input');
     sizeInput.type = 'number';
@@ -585,25 +598,10 @@ function buildLineEditor() {
 
     row1.appendChild(label);
     row1.appendChild(textInput);
-    row1.appendChild(sel);
+    row1.appendChild(fontSel);
     row1.appendChild(sizeInput);
 
-    // helper: make color mini-picker
-    function mkColorPick(initVal, onchange) {
-      const wrap = document.createElement('label');
-      wrap.style.cssText = 'position:relative;cursor:pointer;display:inline-flex;';
-      const swatch = document.createElement('div');
-      swatch.className = 'fx-color';
-      swatch.style.background = initVal;
-      const picker = document.createElement('input');
-      picker.type = 'color'; picker.value = initVal;
-      picker.style.cssText = 'position:absolute;width:0;height:0;opacity:0;';
-      picker.oninput = function(){ swatch.style.background = this.value; onchange(this.value); };
-      wrap.appendChild(swatch); wrap.appendChild(picker);
-      return wrap;
-    }
-
-    // ── Row 2: Text color + B I U ──────────────────────────────────
+    // ── Row 2: text color + B I U ──────────────────────────────────
     const row2 = document.createElement('div');
     row2.className = 'line-style-row';
 
@@ -613,7 +611,7 @@ function buildLineEditor() {
     const colorSwatch = document.createElement('div');
     colorSwatch.className = 'line-color-swatch';
     colorSwatch.style.background = ld.color || '#ffffff';
-    colorSwatch.style.boxShadow = (ld.color === '#ffffff' || !ld.color) ? 'inset 0 0 0 1px #444' : 'none';
+    colorSwatch.style.boxShadow = (!ld.color || ld.color==='#ffffff') ? 'inset 0 0 0 1px #444' : 'none';
     const colorPicker = document.createElement('input');
     colorPicker.type = 'color'; colorPicker.value = ld.color || '#ffffff';
     colorPicker.style.cssText = 'position:absolute;width:0;height:0;opacity:0;';
@@ -621,67 +619,62 @@ function buildLineEditor() {
     colorWrap.appendChild(colorSwatch); colorWrap.appendChild(colorPicker);
 
     const btnB = document.createElement('button');
-    btnB.className = 'style-btn'+(ld.bold?' on':''); btnB.title='Bold'; btnB.innerHTML='<b>B</b>';
+    btnB.className='style-btn'+(ld.bold?' on':''); btnB.title='Bold'; btnB.innerHTML='<b>B</b>';
     btnB.onclick=(function(idx,btn){return function(){lineData[idx].bold=!lineData[idx].bold;btn.classList.toggle('on');regen();};})(i,btnB);
 
     const btnI = document.createElement('button');
-    btnI.className = 'style-btn'+(ld.italic?' on':''); btnI.title='Italic'; btnI.innerHTML='<i>I</i>';
+    btnI.className='style-btn'+(ld.italic?' on':''); btnI.title='Italic'; btnI.innerHTML='<i>I</i>';
     btnI.onclick=(function(idx,btn){return function(){lineData[idx].italic=!lineData[idx].italic;btn.classList.toggle('on');regen();};})(i,btnI);
 
     const btnU = document.createElement('button');
-    btnU.className = 'style-btn'+(ld.underline?' on':''); btnU.title='Underline'; btnU.innerHTML='<u>U</u>';
+    btnU.className='style-btn'+(ld.underline?' on':''); btnU.title='Underline'; btnU.innerHTML='<u>U</u>';
     btnU.onclick=(function(idx,btn){return function(){lineData[idx].underline=!lineData[idx].underline;btn.classList.toggle('on');regen();};})(i,btnU);
 
-    const lbl1 = document.createElement('span');
-    lbl1.style.cssText='font-size:10px;color:var(--text2);margin-left:2px;'; lbl1.textContent='color';
-    const lbl2 = document.createElement('span');
-    lbl2.style.cssText='font-size:10px;color:var(--text2);margin-left:4px;'; lbl2.textContent='style';
-
-    row2.appendChild(colorWrap); row2.appendChild(lbl1);
+    row2.appendChild(colorWrap);
+    row2.appendChild(document.createTextNode(' '));
+    const lbl1=document.createElement('span'); lbl1.style.cssText='font-size:10px;color:var(--text2);margin-right:4px;'; lbl1.textContent='color'; row2.appendChild(lbl1);
     row2.appendChild(btnB); row2.appendChild(btnI); row2.appendChild(btnU);
-    row2.appendChild(lbl2);
+    const lbl2=document.createElement('span'); lbl2.style.cssText='font-size:10px;color:var(--text2);margin-left:4px;'; lbl2.textContent='style'; row2.appendChild(lbl2);
 
-    // ── Row 3: Effects — Highlight, Outline, Stroke, 3D, Glow ──────
+    // ── Row 3: FX buttons ──────────────────────────────────────────
     const row3 = document.createElement('div');
     row3.className = 'fx-row';
 
-    // Highlight
-    const btnHL = document.createElement('button');
-    btnHL.className='fx-btn'+(ld.highlight?' on':''); btnHL.textContent='🟡 Highlight';
-    const hlPick = mkColorPick(ld.hlColor||'#ffff00', (function(idx){return function(v){lineData[idx].hlColor=v;regen();};})(i));
-    btnHL.onclick=(function(idx,btn){return function(){lineData[idx].highlight=!lineData[idx].highlight;btn.classList.toggle('on');regen();};})(i,btnHL);
+    const fxLabel = document.createElement('span');
+    fxLabel.style.cssText = 'font-size:10px;color:var(--text2);margin-right:2px;';
+    fxLabel.textContent = 'fx:';
+    row3.appendChild(fxLabel);
+
+
 
     // Outline
     const btnOL = document.createElement('button');
-    btnOL.className='fx-btn'+(ld.outline?' on':''); btnOL.textContent='◻ Outline';
-    const olPick = mkColorPick(ld.outColor||'#000000', (function(idx){return function(v){lineData[idx].outColor=v;regen();};})(i));
-    btnOL.onclick=(function(idx,btn){return function(){lineData[idx].outline=!lineData[idx].outline;btn.classList.toggle('on');regen();};})(i,btnOL);
+    btnOL.className = 'fx-btn' + (ld.outline ? ' on' : '');
+    btnOL.textContent = '◻ Outline';
+    btnOL.onclick = (function(idx, btn){ return function(){ lineData[idx].outline = !lineData[idx].outline; btn.classList.toggle('on'); regen(); }; })(i, btnOL);
+    const olPick = mkColorPick(ld.outColor || '#000000', (function(idx){ return function(v){ lineData[idx].outColor = v; regen(); }; })(i));
+    row3.appendChild(btnOL); row3.appendChild(olPick);
 
     // Stroke
     const btnST = document.createElement('button');
-    btnST.className='fx-btn'+(ld.stroke?' on':''); btnST.textContent='✏ Stroke';
-    const stPick = mkColorPick(ld.strokeColor||'#000000', (function(idx){return function(v){lineData[idx].strokeColor=v;regen();};})(i));
-    btnST.onclick=(function(idx,btn){return function(){lineData[idx].stroke=!lineData[idx].stroke;btn.classList.toggle('on');regen();};})(i,btnST);
+    btnST.className = 'fx-btn' + (ld.stroke ? ' on' : '');
+    btnST.textContent = '✏ Stroke';
+    btnST.onclick = (function(idx, btn){ return function(){ lineData[idx].stroke = !lineData[idx].stroke; btn.classList.toggle('on'); regen(); }; })(i, btnST);
+    const stPick = mkColorPick(ld.strokeColor || '#000000', (function(idx){ return function(v){ lineData[idx].strokeColor = v; regen(); }; })(i));
+    row3.appendChild(btnST); row3.appendChild(stPick);
 
-    // 3D Shadow
+    // 3D
     const btn3D = document.createElement('button');
-    btn3D.className='fx-btn'+(ld.shadow3d?' on':''); btn3D.textContent='🎲 3D';
-    btn3D.onclick=(function(idx,btn){return function(){lineData[idx].shadow3d=!lineData[idx].shadow3d;btn.classList.toggle('on');regen();};})(i,btn3D);
+    btn3D.className = 'fx-btn' + (ld.shadow3d ? ' on' : '');
+    btn3D.textContent = '🎲 3D';
+    btn3D.onclick = (function(idx, btn){ return function(){ lineData[idx].shadow3d = !lineData[idx].shadow3d; btn.classList.toggle('on'); regen(); }; })(i, btn3D);
+    row3.appendChild(btn3D);
 
     // Glow
     const btnGW = document.createElement('button');
-    btnGW.className='fx-btn'+(ld.glow?' on':''); btnGW.textContent='✨ Glow';
-    btn3D.onclick=(function(idx,btn){return function(){lineData[idx].shadow3d=!lineData[idx].shadow3d;btn.classList.toggle('on');regen();};})(i,btn3D);
-    btnGW.onclick=(function(idx,btn){return function(){lineData[idx].glow=!lineData[idx].glow;btn.classList.toggle('on');regen();};})(i,btnGW);
-
-    const fxLabel = document.createElement('span');
-    fxLabel.style.cssText='font-size:10px;color:var(--text2);'; fxLabel.textContent='fx';
-
-    row3.appendChild(fxLabel);
-    row3.appendChild(btnHL); row3.appendChild(hlPick);
-    row3.appendChild(btnOL); row3.appendChild(olPick);
-    row3.appendChild(btnST); row3.appendChild(stPick);
-    row3.appendChild(btn3D);
+    btnGW.className = 'fx-btn' + (ld.glow ? ' on' : '');
+    btnGW.textContent = '✨ Glow';
+    btnGW.onclick = (function(idx, btn){ return function(){ lineData[idx].glow = !lineData[idx].glow; btn.classList.toggle('on'); regen(); }; })(i, btnGW);
     row3.appendChild(btnGW);
 
     card.appendChild(row1);
@@ -693,7 +686,7 @@ function buildLineEditor() {
 
 function addLine() {
   if (lineData.length >= 6) return;
-  lineData.push({text:'', fontIdx:0, fontSize:DEF_SIZE, color:selColor, bold:false, italic:false, underline:false, highlight:false, hlColor:'#ffff00', outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3});
+  lineData.push({text:'', fontIdx:0, fontSize:DEF_SIZE, color:selColor, bold:false, italic:false, underline:false, outline:false, outColor:'#000000', shadow3d:false, glow:false, stroke:false, strokeColor:'#000000', strokeW:3});
   buildLineEditor(); regen();
 }
 
@@ -719,66 +712,133 @@ function drawThumbnailMultiFont() {
   canvas.width = W; canvas.height = H;
   ctx.clearRect(0, 0, W, H);
 
-  const activeLines = lineData.filter(l => l.text.trim() !== '' || l.text === '');
   const visibleLines = lineData;
-
-  // Per-line font sizes — use each line's own fontSize
-  const isDark = selColor === '#000000' || selColor === '#1a1a1a';
-  ctx.shadowColor = isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.85)';
-  ctx.shadowBlur = 18; ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3;
-
-  // Calculate total height using each line's own fontSize
   const lineHeights = visibleLines.map(ld => (ld.fontSize || DEF_SIZE) * selLineSpacing);
   const totalH = lineHeights.reduce((a, b) => a + b, 0);
   let cx = W / 2;
   if (selAlign === 'left') cx = 80;
   else if (selAlign === 'right') cx = W - 80;
 
-  // Build Y positions for each line
   const lineYs = [];
   let curY = H / 2 - totalH / 2;
-  visibleLines.forEach((ld, i) => {
-    const fs = ld.fontSize || selSize;
+  visibleLines.forEach(ld => {
+    const fs = ld.fontSize || DEF_SIZE;
     lineYs.push(curY + fs * 0.85);
     curY += fs * selLineSpacing;
   });
 
   visibleLines.forEach((ld, i) => {
-    const fs = ld.fontSize || selSize;
+    const fs = ld.fontSize || DEF_SIZE;
+    if (!ld.text) return;
     const fontFamily = FONTS[ld.fontIdx] ? FONTS[ld.fontIdx].f : FONTS[0].f;
     const weight = ld.bold ? 'bold' : 'normal';
-    const style = ld.italic ? 'italic' : 'normal';
-    ctx.font = style + ' ' + weight + ' ' + fs + 'px ' + fontFamily;
-    ctx.textAlign = selAlign;
-    const lineColor = ld.color || selColor;
-    ctx.fillStyle = lineColor;
-    const isDarkLine = lineColor === '#000000';
-    ctx.shadowColor = isDarkLine ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.8)';
-    ctx.shadowBlur = 16; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
+    const fstyle = ld.italic ? 'italic' : 'normal';
+    const fontStr = fstyle + ' ' + weight + ' ' + fs + 'px ' + fontFamily;
+    const lineColor = ld.color || '#ffffff';
     const y = lineYs[i];
     const line = ld.text;
-    if (selLetterSpacing !== 0) {
-      const chars = line.split('');
-      const totalW = ctx.measureText(line).width + selLetterSpacing * (chars.length - 1);
-      let x = selAlign === 'center' ? cx - totalW/2 : selAlign === 'right' ? cx - totalW : cx;
-      ctx.textAlign = 'left';
-      chars.forEach(ch => { ctx.fillText(ch, x, y); x += ctx.measureText(ch).width + selLetterSpacing; });
-      if (ld.underline) {
-        const lineW = totalW;
-        const ux = selAlign === 'center' ? cx - lineW/2 : selAlign === 'right' ? cx - lineW : cx;
-        ctx.shadowBlur = 0;
-        ctx.fillRect(ux, y + fs * 0.12, lineW, Math.max(2, fs * 0.06));
-      }
-      ctx.textAlign = selAlign;
-    } else {
-      ctx.fillText(line, cx, y);
-      if (ld.underline) {
-        ctx.shadowBlur = 0;
-        const tw = ctx.measureText(line).width;
-        const ux = selAlign === 'center' ? cx - tw/2 : selAlign === 'right' ? cx - tw : cx;
-        ctx.fillRect(ux, y + fs * 0.12, tw, Math.max(2, fs * 0.06));
+
+    // Measure width helper
+    ctx.font = fontStr;
+    const charWidths = line.split('').map(ch => ctx.measureText(ch).width);
+    const tw = selLetterSpacing !== 0
+      ? charWidths.reduce((a,b)=>a+b,0) + selLetterSpacing * Math.max(0, line.length-1)
+      : ctx.measureText(line).width;
+    const tx = selAlign==='center' ? cx-tw/2 : selAlign==='right' ? cx-tw : cx;
+
+    // Helper: draw text (respects letter spacing)
+    function drawText(fillOrStroke) {
+      ctx.font = fontStr;
+      if (selLetterSpacing !== 0) {
+        const saved = ctx.textAlign;
+        ctx.textAlign = 'left';
+        let x = tx;
+        line.split('').forEach((ch, ci) => {
+          if (fillOrStroke === 'fill') ctx.fillText(ch, x, y);
+          else ctx.strokeText(ch, x, y);
+          x += charWidths[ci] + selLetterSpacing;
+        });
+        ctx.textAlign = saved;
+      } else {
+        if (fillOrStroke === 'fill') ctx.fillText(line, cx, y);
+        else ctx.strokeText(line, cx, y);
       }
     }
+
+    ctx.save();
+    // ── 2. 3D SHADOW (stacked offset copies behind) ───────────────
+    if (ld.shadow3d) {
+      ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+      const depth = Math.max(4, Math.round(fs * 0.055));
+      for (let d = depth; d >= 1; d--) {
+        const shade = Math.max(20, 100 - d * 12);
+        ctx.fillStyle = 'rgb(' + shade + ',' + shade + ',' + shade + ')';
+        ctx.save();
+        ctx.translate(d, d);
+        drawText('fill');
+        ctx.restore();
+      }
+    }
+
+    // ── 3. GLOW (blurred halo pass) ───────────────────────────────
+    if (ld.glow) {
+      ctx.shadowColor = lineColor;
+      ctx.shadowBlur = fs * 0.35;
+      ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+      ctx.fillStyle = lineColor;
+      drawText('fill');
+      ctx.shadowBlur = 0;
+    }
+
+    // ── 4. STROKE border (behind fill) ────────────────────────────
+    if (ld.stroke) {
+      ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = ld.strokeColor || '#000000';
+      ctx.lineWidth = ld.strokeW || 4;
+      ctx.lineJoin = 'round';
+      drawText('stroke');
+    }
+
+    // ── 5. OUTLINE (hollow — only strokeText, no fill) ────────────
+    if (ld.outline) {
+      ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = ld.outColor || '#000000';
+      ctx.lineWidth = Math.max(2, fs * 0.04);
+      ctx.lineJoin = 'round';
+      drawText('stroke');
+      // skip fill below for pure outline mode
+    }
+
+    // ── 6. MAIN FILL ──────────────────────────────────────────────
+    if (!ld.outline) {
+      if (!ld.glow) {
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = 10; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
+      } else {
+        ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+      }
+      ctx.fillStyle = lineColor;
+      drawText('fill');
+      ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+    }
+
+    // ── 7. BOLD stroke pass (B adds weight via strokeText) ─────────
+    if (ld.bold && !ld.stroke && !ld.outline) {
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = Math.max(1, fs * 0.02);
+      ctx.lineJoin = 'round';
+      ctx.shadowBlur = 0;
+      drawText('stroke');
+    }
+
+    // ── 8. UNDERLINE ──────────────────────────────────────────────
+    if (ld.underline) {
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = lineColor;
+      ctx.fillRect(tx, y + fs * 0.1, tw, Math.max(2, fs * 0.05));
+    }
+
+    ctx.restore();
   });
 
   ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
