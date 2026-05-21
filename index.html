@@ -65,6 +65,9 @@ header p{font-size:11px;color:var(--text2);letter-spacing:.04em}
 .sz-pill{padding:4px 11px;border-radius:999px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;cursor:pointer;transition:all .12s}
 .sz-pill:hover{border-color:#555;color:var(--text)}
 .sz-pill.active{background:var(--red);color:#fff;border-color:var(--red)}
+.slider-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.slider-row input[type=range]{flex:1;accent-color:var(--red);cursor:pointer}
+.slider-val{font-size:11px;color:var(--text);font-weight:700;min-width:36px;text-align:right;font-family:monospace}
 
 /* BG */
 
@@ -146,6 +149,16 @@ canvas{width:100%!important;height:100%!important;display:block}
         <div class="sz-pill" data-lines="1">1 Line</div>
         <div class="sz-pill active" data-lines="2">2 Lines</div>
         <div class="sz-pill" data-lines="3">3 Lines</div>
+      </div>
+      <div class="flabel" style="margin-top:13px">line spacing</div>
+      <div class="slider-row">
+        <input type="range" id="lineSpacing" min="0.8" max="2.5" step="0.05" value="1.12" oninput="selLineSpacing=parseFloat(this.value);document.getElementById('lsVal').textContent=this.value;regen()" />
+        <span class="slider-val" id="lsVal">1.12</span>
+      </div>
+      <div class="flabel" style="margin-top:13px">letter spacing</div>
+      <div class="slider-row">
+        <input type="range" id="letterSpacing" min="-10" max="60" step="1" value="0" oninput="selLetterSpacing=parseInt(this.value);document.getElementById('letVal').textContent=this.value+'px';regen()" />
+        <span class="slider-val" id="letVal">0px</span>
       </div>
     </div>
   </div>
@@ -463,7 +476,7 @@ const TEXT_COLORS = [
 
 const BG_OPTIONS = [];
 
-let selFont = 0, selColor = '#ffffff', selSize = 130, selAlign = 'center', selLines = 2;
+let selFont = 0, selColor = '#ffffff', selSize = 130, selAlign = 'center', selLines = 2, selLineSpacing = 1.12, selLetterSpacing = 0;
 let filteredFonts = [...FONTS];
 
 function buildGrid() {
@@ -524,21 +537,20 @@ function generate() { const t = document.getElementById('titleInput').value.trim
 
 function splitTitle(title) {
   const words = title.split(' ');
-  const upper = title.toUpperCase();
-  if (selLines === 1 || words.length <= 1) return [upper];
+  if (selLines === 1 || words.length <= 1) return [title];
   if (selLines === 2) {
-    if (words.length <= 2) return [upper];
+    if (words.length <= 2) return [title];
     const mid = Math.ceil(words.length / 2);
-    return [words.slice(0, mid).join(' ').toUpperCase(), words.slice(mid).join(' ').toUpperCase()];
+    return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
   }
   // 3 lines
-  if (words.length <= 2) return [upper];
-  if (words.length === 3) return words.map(w => w.toUpperCase());
+  if (words.length <= 2) return [title];
+  if (words.length === 3) return words;
   const size = Math.ceil(words.length / 3);
   return [
-    words.slice(0, size).join(' ').toUpperCase(),
-    words.slice(size, size * 2).join(' ').toUpperCase(),
-    words.slice(size * 2).join(' ').toUpperCase()
+    words.slice(0, size).join(' '),
+    words.slice(size, size * 2).join(' '),
+    words.slice(size * 2).join(' ')
   ].filter(l => l.trim());
 }
 
@@ -563,12 +575,27 @@ function drawThumbnail(title) {
   const isDark = selColor === '#000000' || selColor === '#1a1a1a';
   ctx.shadowColor = isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.85)';
   ctx.shadowBlur = 18; ctx.shadowOffsetX = 3; ctx.shadowOffsetY = 3;
-  const lineH = fs * 1.12, totalH = lines.length * lineH;
+  const lineH = fs * selLineSpacing, totalH = lines.length * lineH;
   let cx = W / 2;
   if (selAlign === 'left') cx = 80;
   else if (selAlign === 'right') cx = W - 80;
   const startY = H / 2 - totalH / 2 + fs * 0.85;
-  lines.forEach((line, i) => ctx.fillText(line, cx, startY + i * lineH));
+  if (selLetterSpacing !== 0) {
+    lines.forEach((line, i) => {
+      const y = startY + i * lineH;
+      const chars = line.split('');
+      const totalW = ctx.measureText(line).width + selLetterSpacing * (chars.length - 1);
+      let x = selAlign === 'center' ? cx - totalW / 2 : selAlign === 'right' ? cx - totalW : cx;
+      ctx.textAlign = 'left';
+      chars.forEach((ch, ci) => {
+        ctx.fillText(ch, x, y);
+        x += ctx.measureText(ch).width + selLetterSpacing;
+      });
+    });
+    ctx.textAlign = selAlign;
+  } else {
+    lines.forEach((line, i) => ctx.fillText(line, cx, startY + i * lineH));
+  }
   ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
   ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'right';
   ctx.fillStyle = 'rgba(255,255,255,0.08)';
