@@ -437,6 +437,7 @@ header p{font-size:12px;color:var(--t2);letter-spacing:.01em}
 /* ── Divider ─────────────────────────────────────────────────────── */
 .divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:16px 0}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Rochester&family=Homemade+Apple&family=Marck+Script&family=Cookie&family=Oleo+Script&family=Condiment&family=Give+You+Glory&family=Calligraffiti&family=Niconne&family=Fasthand&family=IM+Fell+English&family=Uncial+Antiqua&family=Metamorphous&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
@@ -447,7 +448,7 @@ header p{font-size:12px;color:var(--t2);letter-spacing:.01em}
     <span class="badge">100% FREE</span>
     <span class="badge pro-badge">PRO</span>
   </div>
-  <p>378 fonts &nbsp;·&nbsp; 49 pro styles &nbsp;·&nbsp; multi-pass rendering &nbsp;·&nbsp; unlimited lines &nbsp;·&nbsp; smart presets</p>
+  <p>378 fonts &nbsp;·&nbsp; 54 pro styles &nbsp;·&nbsp; multi-pass rendering &nbsp;·&nbsp; unlimited lines &nbsp;·&nbsp; smart presets</p>
 </header>
 
 <div class="card">
@@ -1079,7 +1080,11 @@ const WA_STYLES = [
   {id:'mirror',     name:'Mirror',        cat:'classic',bg:'#111',    c1:'#ffffff',c2:'#aaaaaa'},
   {id:'glass',      name:'Glass',         cat:'classic',bg:'#001830', c1:'#88ddff',c2:'#ffffff'},
   {id:'banner',     name:'Banner',        cat:'classic',bg:'#cc0000', c1:'#ffffff',c2:'#ffff00'},
-  {id:'chalk',      name:'Chalk',         cat:'classic',bg:'#1a1a2a', c1:'#eeeeee',c2:'#ccccee'},
+  {id:'calligold',  name:'Calligraphy Gold', cat:'gold',   bg:'#1a0800', c1:'#ffd700',c2:'#fff5cc'},
+  {id:'inkbrush',   name:'Ink Brush',         cat:'grunge', bg:'#f5f0e8', c1:'#1a0a00',c2:'#3d1a00'},
+  {id:'versals',    name:'Versals / Drop Cap', cat:'classic',bg:'#fff',    c1:'#8b0000',c2:'#ffd700'},
+  {id:'copperplate',name:'Copperplate',        cat:'gold',   bg:'#0a0a0a', c1:'#c8a870',c2:'#fff5e0'},
+  {id:'chalk',      name:'Chalk',              cat:'classic',bg:'#1a1a2a', c1:'#eeeeee',c2:'#ccccee'},
 ];
 
 const COLOR_PRESETS = ['#ffd700','#ff8c00','#ffffff','#ff0000','#00ffe7','#ff69b4','#00ff88','#0088ff','#cc00ff','#ff6b35','#222222','#888888'];
@@ -1491,8 +1496,7 @@ function applyWaStyleFull(ctx, styleId, text, cx, cy, fs, W, c1, c2, strokeW, st
       clearShadow();
       const dep2=Math.round(fs*0.04);
       const hcols=['#ff0080','#ff8000','#ffff00','#00ff80','#00ffff','#0080ff','#8000ff'];
-      for(let d=dep2;d>=1;d--){ctx.globalAlpha=0.3;fill(hcols[d%hcols.length]);}
-      ctx.globalAlpha=1;
+      ctx.save();for(let d=dep2;d>=1;d--){ctx.globalAlpha=0.3;fill(hcols[d%hcols.length]);}ctx.restore();ctx.globalAlpha=1;
       const hg=G(cx-tw/2,cy,cx+tw/2,cy,'#ff0080','#ff8000','#ffff00','#00ff80','#00ffff','#0080ff','#8000ff');
       setShadow(glowB>0?glowC:'rgba(200,100,255,0.6)',glowB>0?glowB:fs*0.28,0,0);
       fill(hg); clearShadow(); break;
@@ -1521,16 +1525,12 @@ function applyWaStyleFull(ctx, styleId, text, cx, cy, fs, W, c1, c2, strokeW, st
     }
     case 'smoke': {
       clearShadow();
-      ctx.filter='blur('+(fs*0.015)+'px)';
-      ctx.globalAlpha=0.6;fill(G(cx,cy-fs*0.8,cx,cy+fs*0.3,'rgba(200,200,220,0.9)','rgba(150,150,180,0.7)','rgba(100,100,140,0.5)'));
-      ctx.globalAlpha=0.4;fill(G(cx,cy-fs*0.8,cx,cy+fs*0.3,'rgba(200,200,220,0.9)','rgba(150,150,180,0.7)','rgba(100,100,140,0.5)'));
-      ctx.globalAlpha=1;ctx.filter='none'; break;
+      ctx.save();ctx.filter='blur('+(fs*0.015)+'px)';ctx.globalAlpha=0.6;fill(G(cx,cy-fs*0.8,cx,cy+fs*0.3,'rgba(200,200,220,0.9)','rgba(150,150,180,0.7)','rgba(100,100,140,0.5)'));ctx.globalAlpha=0.4;fill(G(cx,cy-fs*0.8,cx,cy+fs*0.3,'rgba(200,200,220,0.9)','rgba(150,150,180,0.7)','rgba(100,100,140,0.5)'));ctx.restore(); break;
     }
     case 'glitch': {
       clearShadow();
       const offsets=[[4,2],[-3,-1],[2,4],[-4,-3],[3,1]];
-      offsets.forEach((o,oi)=>{ctx.globalAlpha=0.6;ctx.fillStyle=oi%2===0?(c1):(c2);ctx.fillText(text,cx+o[0],cy+o[1]);});
-      ctx.globalAlpha=1;fill('#ffffff'); break;
+      ctx.save();offsets.forEach((o,oi)=>{ctx.globalAlpha=0.6;ctx.fillStyle=oi%2===0?(c1):(c2);ctx.fillText(text,cx+o[0],cy+o[1]);});ctx.restore();ctx.globalAlpha=1;fill('#ffffff'); break;
     }
     case 'retro': {
       clearShadow();
@@ -1569,11 +1569,7 @@ function applyWaStyleFull(ctx, styleId, text, cx, cy, fs, W, c1, c2, strokeW, st
       clearShadow(); break;
     }
     case 'watercolor': {
-      clearShadow(); ctx.filter='blur('+(fs*0.008)+'px)';
-      ctx.globalAlpha=0.6;fill(G(cx-tw*0.4,cy-fs*0.8,cx+tw*0.4,cy+fs*0.3,c1,c2,c1));
-      ctx.globalAlpha=0.4;ctx.fillStyle=c1;ctx.fillText(text,cx+2,cy+2);
-      ctx.globalAlpha=1;fill(G(cx-tw*0.4,cy-fs*0.8,cx+tw*0.4,cy+fs*0.3,c1,c2,c1));
-      ctx.filter='none'; break;
+      clearShadow(); ctx.save();ctx.filter='blur('+(fs*0.008)+'px)';ctx.globalAlpha=0.6;fill(G(cx-tw*0.4,cy-fs*0.8,cx+tw*0.4,cy+fs*0.3,c1,c2,c1));ctx.globalAlpha=0.4;ctx.fillStyle=c1;ctx.fillText(text,cx+2,cy+2);ctx.restore();ctx.globalAlpha=1;fill(G(cx-tw*0.4,cy-fs*0.8,cx+tw*0.4,cy+fs*0.3,c1,c2,c1)); break;
     }
     case 'pixel': {
       clearShadow();
@@ -1619,7 +1615,7 @@ function applyWaStyleFull(ctx, styleId, text, cx, cy, fs, W, c1, c2, strokeW, st
     case 'glass': {
       clearShadow();
       stroke(c1,Math.max(2,fs*0.03));
-      ctx.globalAlpha=0.25; fill(c1); ctx.globalAlpha=1;
+      ctx.save();ctx.globalAlpha=0.25; fill(c1); ctx.restore();
       ctx.globalAlpha=0.5;fill(G(cx-tw*0.3,cy-fs*0.7,cx+tw*0.1,cy-fs*0.1,'rgba(255,255,255,0.9)','rgba(255,255,255,0)'));
       ctx.globalAlpha=1; break;
     }
@@ -1635,8 +1631,8 @@ function applyWaStyleFull(ctx, styleId, text, cx, cy, fs, W, c1, c2, strokeW, st
     }
     case 'chalk': {
       clearShadow(); stroke(c1,fs*0.025);
-      ctx.globalAlpha=0.75; fill(c1); ctx.globalAlpha=1;
-      ctx.globalAlpha=0.25; ctx.fillStyle=c1;ctx.fillText(text,cx+1,cy-1); ctx.globalAlpha=1; break;
+      ctx.save();ctx.globalAlpha=0.75; fill(c1); ctx.restore();
+      ctx.save();ctx.globalAlpha=0.25; ctx.fillStyle=c1;ctx.fillText(text,cx+1,cy-1); ctx.restore(); break;
     }
     case 'bannerred': {
       clearShadow();
@@ -1646,12 +1642,66 @@ function applyWaStyleFull(ctx, styleId, text, cx, cy, fs, W, c1, c2, strokeW, st
       addSheen(0.35); break;
     }
 
+    case 'calligold': {
+      // Thin elegant gold with calligraphy feel
+      clearShadow();
+      stroke('#2a0a00', fs*0.055); stroke('#8b4500', fs*0.025);
+      setShadow('rgba(120,60,0,0.5)', 10, 2, 4);
+      fill(G(cx, cy-fs*0.85, cx, cy+fs*0.28, '#fff8e0','#ffd700','#daa520','#b8860b','#8b6914'));
+      clearShadow();
+      // Delicate sheen
+      ctx.save(); ctx.globalAlpha=0.38;
+      fill(G(cx-tw*0.45,cy-fs*0.78,cx+tw*0.2,cy-fs*0.05,'rgba(255,255,240,0.95)','rgba(255,220,100,0)'));
+      ctx.restore(); break;
+    }
+    case 'inkbrush': {
+      // Black ink brush on light background
+      clearShadow();
+      ctx.filter = 'blur(' + (fs*0.006) + 'px)';
+      ctx.globalAlpha = 0.92;
+      fill(G(cx, cy-fs*0.85, cx, cy+fs*0.3, '#0a0500','#1a0a00','#2d1500'));
+      ctx.globalAlpha = 0.6;
+      ctx.filter = 'blur(' + (fs*0.012) + 'px)';
+      fill('#1a0a00');
+      ctx.globalAlpha = 1; ctx.filter = 'none';
+      fill(G(cx, cy-fs*0.85, cx, cy+fs*0.3,'#0a0500','#1a0a00'));
+      // Ink texture highlight
+      ctx.save(); ctx.globalAlpha=0.15;
+      fill(G(cx-tw*0.3,cy-fs*0.7,cx+tw*0.1,cy-fs*0.1,'rgba(255,255,240,0.8)','rgba(255,240,200,0)'));
+      ctx.restore(); break;
+    }
+    case 'versals': {
+      // Illuminated manuscript / drop cap style — red + gold
+      clearShadow();
+      extrude(Math.round(fs*0.04),(d,dep)=>'rgba(80,0,0,0.5)');
+      stroke('#3d0000', fs*0.09); stroke('#8b0000', fs*0.04);
+      setShadow('rgba(100,0,0,0.5)', 8, 2, 3);
+      fill(G(cx, cy-fs*0.85, cx, cy+fs*0.3, '#ff6666','#cc0000','#8b0000','#550000'));
+      clearShadow();
+      // Gold inner border stroke
+      ctx.save(); ctx.strokeStyle='#ffd700'; ctx.lineWidth=fs*0.018; ctx.lineJoin='round';
+      ctx.strokeText(text, cx, cy); ctx.restore(); break;
+    }
+    case 'copperplate': {
+      // Copperplate engraving style — thin elegant strokes
+      clearShadow();
+      stroke('#0a0a0a', fs*0.06);
+      setShadow('rgba(0,0,0,0.4)', 6, 1, 2);
+      fill(G(cx, cy-fs*0.85, cx, cy+fs*0.3,'#f5e6c8','#c8a870','#a07840','#8b6914'));
+      clearShadow();
+      ctx.save(); ctx.globalAlpha=0.35;
+      fill(G(cx-tw*0.4,cy-fs*0.7,cx+tw*0.1,cy-fs*0.05,'rgba(255,248,220,0.9)','rgba(200,168,112,0)'));
+      ctx.restore(); break;
+    }
     default: {
       if(strokeW>0) stroke(strokeCol,strokeW);
       if(shB>0){setShadow(shC,shB,3,4);} else if(glowB>0){setShadow(glowC,glowB,0,0);}
       fill(c1); clearShadow();
     }
   }
+  // Always restore globalAlpha and filter
+  ctx.globalAlpha = 1;
+  ctx.filter = 'none';
 }
 
 function applyWaStyle(ctx,styleId,text,cx,cy,fs,W,c1,c2,strokeW,strokeCol,gap,shB,shC){
@@ -1718,6 +1768,75 @@ function buildWaStyleGrid() {
   // Category pills bound in DOMContentLoaded
 }
 
+// ══════════════════════════════════════════════════════════════════════
+// FONT CATEGORIES — for per-line font filter
+// ══════════════════════════════════════════════════════════════════════
+const FONT_CATEGORIES = {
+  all: null,
+  calligraphy: ['Great Vibes','Dancing Script','Tangerine','Allura','Sacramento','Pinyon Script',
+    'Alex Brush','Satisfy','Italianno','Dr Sugiyama','Gwendolyn','Ruthie','Monsieur La Doulaise',
+    'Mrs Saint Delafield','Petit Formal Script','WindSong','Ephesis','Ms Madi','Engagement',
+    'Lavishly Yours','Lovers Quarrel','Berkshire Swash','Style Script','Waterfall','Fleur De Leah',
+    'Luxurious Script','Kaushan Script','Rochester','Marck Script','Cookie','Oleo Script',
+    'Condiment','Give You Glory','Calligraffiti','Niconne','Fasthand','Arizonia','Clicker Script',
+    'Courgette','Parisienne','Norican','Mea Culpa','Mr De Haviland','Stalemate','Bilbo',
+    'Bilbo Swash Caps','Dynalight','Eagle Lake','Sevillana','Miss Fajardose','Mr Bedfort',
+    'Mr Dafoe','Italianno','Ruthie','Zeyada','Felipa','Fondamento','Vibur','Ole',
+    'Grechen Fuemen','Inspiration','Ruge Boogie'],
+  handwriting: ['Permanent Marker','Kalam','Caveat','Indie Flower','Patrick Hand','Handlee',
+    'Gochi Hand','Rock Salt','Cedarville Cursive','Cabin Sketch','Special Elite',
+    'Homemade Apple','Kolker Brush','Comforter Brush','Knewave','Nanum Brush Script',
+    'Nanum Pen Script','Praise','Fuzzy Bubbles','Sue Ellen Francisco','The Girl Next Door',
+    'Waiting for the Sunrise','Kristi','Qwitcher Grypen'],
+  serif: ['Playfair Display','Cinzel','Cormorant','Bodoni Moda','Libre Baskerville',
+    'Merriweather','Spectral','Lora','Crimson Pro','Source Serif 4','Cardo','Forum',
+    'Marcellus','Philosopher','Bitter','Arvo','Rokkitt','Zilla Slab','Josefin Slab',
+    'DM Serif Display','Gloock','Yeseva One','Ultra','Alfa Slab One','Fraunces',
+    'IM Fell English','Playfair Display SC','Cormorant SC','Cormorant Garamond',
+    'GFS Didot','Libre Caslon Display','Vidaloka','Volkhov','Taviraj','DM Serif Text',
+    'Petrona','Italiana','Cormorant Upright'],
+  medieval: ['Cinzel Decorative','UnifrakturMaguntia','Uncial Antiqua','Metamorphous',
+    'MedievalSharp','Moirai One','Tapestry','Almendra Display','Almendra SC',
+    'Caesar Dressing','Fondamento','Ewert','Risque','New Rocker','Metal Mania',
+    'Pirata One','Butcherman','Creepster','Henny Penny','Jolly Lodger','Warnes',
+    'Fredericka the Great','Luxurious Roman'],
+  bold_impact: ['Bebas Neue','Anton','Oswald','Black Ops One','Luckiest Guy','Bungee',
+    'Fugaz One','Titan One','Rowdies','Lilita One','Francois One','Squada One','Russo One',
+    'Alfa Slab One','Big Shoulders Display','Dela Gothic One','Rajdhani','Fjalla One',
+    'Barlow Condensed','Righteous','Sigmar','Black Han Sans'],
+  modern_clean: ['Poppins','Nunito','Quicksand','Jost','Mulish','Raleway','Comfortaa',
+    'Albert Sans','Epilogue','Lexend','Outfit','Figtree','Onest','Manrope',
+    'Space Grotesk','Josefin Sans','Tenor Sans','Questrial','Sora','Urbanist',
+    'Hanken Grotesk','Varela Round'],
+  fun_playful: ['Lobster','Pacifico','Fredoka','Bubblegum Sans','Chewy','Sniglet',
+    'Boogaloo','Freckle Face','Leckerli One','Shrikhand','Modak','Carter One',
+    'Mountains of Christmas','Baloo 2','Cherry Cream Soda','Lemon','Margarine',
+    'Yatra One','Joti One','Gorditas','Kavoon','Finger Paint'],
+  pixel_tech: ['VT323','Press Start 2P','Share Tech Mono','Silkscreen','DotGothic16',
+    'Nova Mono','Pixelify Sans','Tiny5','Sixtyfour','Jacquard 12','Jacquard 24',
+    'Monoton','Audiowide','Aldrich','Electrolize','Tektur','Oxanium','Orbitron'],
+};
+
+function buildFontSelFiltered(sel, currentFontIdx, category) {
+  const currentName = FONTS[currentFontIdx] ? FONTS[currentFontIdx].name : '';
+  sel.innerHTML = '';
+  let list = FONTS;
+  if (category !== 'all' && FONT_CATEGORIES[category]) {
+    const cats = FONT_CATEGORIES[category];
+    list = FONTS.filter(f => cats.some(n => n.toLowerCase() === f.name.toLowerCase()));
+    if (list.length === 0) list = FONTS; // fallback
+  }
+  let bestIdx = 0;
+  list.forEach((f, li) => {
+    const realIdx = FONTS.indexOf(f);
+    const o = document.createElement('option');
+    o.value = realIdx;
+    o.textContent = f.name;
+    if (f.name === currentName) { o.selected = true; bestIdx = li; }
+    sel.appendChild(o);
+  });
+}
+
 function buildFontSel(sel, idx) {
   sel.innerHTML = '';
   FONTS.forEach((f,i) => { const o=document.createElement('option'); o.value=i; o.textContent=f.name; if(i===idx)o.selected=true; sel.appendChild(o); });
@@ -1774,11 +1893,22 @@ function buildOneCard(wrap, ld, i) {
   }))(i);
   t0.appendChild(textIn);
 
-  // Font row
+  // Font category filter
+  const fcatRow=document.createElement('div'); fcatRow.className='row';
+  const fcatL=document.createElement('span'); fcatL.className='lbl'; fcatL.textContent='category';
+  const fcatSel=document.createElement('select'); fcatSel.className='sel'; fcatSel.style.flex='1';
+  [['all','All fonts'],['calligraphy','\u270d Calligraphy & Script'],['handwriting','\u270f Handwriting'],
+   ['serif','\U0001f524 Serif & Classic'],['medieval','\u2694 Medieval & Gothic'],
+   ['bold_impact','\U0001f4aa Bold & Impact'],['modern_clean','\u2728 Modern & Clean'],
+   ['fun_playful','\U0001f3aa Fun & Playful'],['pixel_tech','\U0001f47e Pixel & Tech']
+  ].forEach(function(p){var o=document.createElement('option');o.value=p[0];o.textContent=p[1];fcatSel.appendChild(o);});
+  fcatRow.appendChild(fcatL); fcatRow.appendChild(fcatSel); t0.appendChild(fcatRow);
+  // Font selector
   const frow=document.createElement('div'); frow.className='row';
   const fl=document.createElement('span'); fl.className='lbl'; fl.textContent='font';
   const fs=document.createElement('select'); fs.className='sel'; fs.style.flex='1';
   buildFontSel(fs, ld.fontIdx);
+  fcatSel.onchange=(function(fsel){return function(){buildFontSelFiltered(fsel,parseInt(fsel.value)||0,this.value);};})(fs);
   fs.onchange=(ii=>(function(){waSnap();waLines[ii].fontIdx=parseInt(this.value);waRender();}))(i);
   frow.appendChild(fl); frow.appendChild(fs); t0.appendChild(frow);
 
@@ -1828,7 +1958,7 @@ function buildOneCard(wrap, ld, i) {
   const strow=document.createElement('div'); strow.className='row';
   const stl=document.createElement('span'); stl.className='lbl'; stl.textContent='style';
   const stsel=document.createElement('select'); stsel.className='sel'; stsel.style.flex='1';
-  const styleOpts=[['same','↳ Same as global'],...WA_STYLES.map(s=>[s.id,s.name]),['ribbon','🎀 Ribbon Banner'],['dash','— Dash Tag —'],['plain','Plain'],['outline2','Outline only'],['dash2','— Double Dash —']];
+  const styleOpts=[['same','↳ Same as global'],...WA_STYLES.map(s=>[s.id,s.name]),['ribbon','🎀 Ribbon Banner'],['dash','— Dash Tag —'],['plain','Plain'],['outline2','Outline only'],['dash2','— Double Dash —'],['dropcap','Ꭰ Drop Cap (big first letter)']];
   styleOpts.forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;if(v===ld.style)o.selected=true;stsel.appendChild(o);});
   stsel.onchange=(function(ii,b){return function(){waSnap();waLines[ii].style=this.value;b.textContent=this.options[this.selectedIndex].text.replace(/[↳🎀—]/g,'').trim().slice(0,14);waRender();};})(i,badge);
   strow.appendChild(stl); strow.appendChild(stsel); t1.appendChild(strow);
@@ -1972,138 +2102,249 @@ function applyCase(text, mode) {
 function waRender() { clearTimeout(waRndTimer); waRndTimer=setTimeout(_waRender,16); }
 
 function _waRender() {
-  const canvas=document.getElementById('waCanvas');
-  if(!canvas) return;
-  const ctx=canvas.getContext('2d');
-  const sizeStr=document.getElementById('waCanvasSize')?.value||'1280x720';
-  const [CW,CH]=sizeStr.split('x').map(Number);
-  canvas.width=CW; canvas.height=CH;
-  ctx.clearRect(0,0,CW,CH);
+  const canvas = document.getElementById('waCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const sizeStr = document.getElementById('waCanvasSize')?.value || '1280x720';
+  const [CW, CH] = sizeStr.split('x').map(Number);
+  canvas.width = CW; canvas.height = CH;
+  ctx.clearRect(0, 0, CW, CH);
 
-  // Background
-  const bgType=document.getElementById('waBgType')?.value||'transparent';
-  if(bgType==='solid'){ctx.fillStyle=document.getElementById('waBgColor')?.value||'#000';ctx.fillRect(0,0,CW,CH);}
-  else if(bgType==='gradient'){
-    const g1=document.getElementById('waBgG1')?.value||'#0a0a1a';
-    const g2=document.getElementById('waBgG2')?.value||'#2d1b69';
-    const dir=document.getElementById('waBgGDir')?.value||'↘';
+  // ── Background ──────────────────────────────────────────────────────
+  const bgType = document.getElementById('waBgType')?.value || 'transparent';
+  if (bgType === 'solid') {
+    ctx.fillStyle = document.getElementById('waBgColor')?.value || '#000';
+    ctx.fillRect(0, 0, CW, CH);
+  } else if (bgType === 'gradient') {
+    const g1  = document.getElementById('waBgG1')?.value  || '#0a0a1a';
+    const g2  = document.getElementById('waBgG2')?.value  || '#2d1b69';
+    const dir = document.getElementById('waBgGDir')?.value || '↘';
     let x0=0,y0=0,x1=CW,y1=CH;
-    if(dir==='→'){y1=0;}else if(dir==='↓'){x1=0;}else if(dir==='↗'){y0=CH;y1=0;}
-    const grd=ctx.createLinearGradient(x0,y0,x1,y1);
-    grd.addColorStop(0,g1);grd.addColorStop(1,g2);
-    ctx.fillStyle=grd; ctx.fillRect(0,0,CW,CH);
-  } else if(bgType==='image'&&waBgImgObj){
-    const sc=Math.max(CW/waBgImgObj.width,CH/waBgImgObj.height);
-    ctx.drawImage(waBgImgObj,(CW-waBgImgObj.width*sc)/2,(CH-waBgImgObj.height*sc)/2,waBgImgObj.width*sc,waBgImgObj.height*sc);
+    if (dir==='→'){y1=0;} else if (dir==='↓'){x1=0;} else if (dir==='↗'){y0=CH;y1=0;}
+    const grd = ctx.createLinearGradient(x0,y0,x1,y1);
+    grd.addColorStop(0,g1); grd.addColorStop(1,g2);
+    ctx.fillStyle = grd; ctx.fillRect(0,0,CW,CH);
+  } else if (bgType === 'image' && waBgImgObj) {
+    const sc = Math.max(CW/waBgImgObj.width, CH/waBgImgObj.height);
+    ctx.drawImage(waBgImgObj, (CW-waBgImgObj.width*sc)/2, (CH-waBgImgObj.height*sc)/2,
+                  waBgImgObj.width*sc, waBgImgObj.height*sc);
   }
 
-  // Global controls
-  const lineGap=parseInt(document.getElementById('waLineGap')?.value||14);
-  const vOffset=parseInt(document.getElementById('waVOffset')?.value||0);
-  const gGlow  =parseInt(document.getElementById('waGlow')?.value||0);
-  const gGlowC =document.getElementById('waGlowC')?.value||'#ffd700';
-  const gSh    =parseInt(document.getElementById('waShadow')?.value||0);
-  const gShC   =document.getElementById('waShC')?.value||'#000000';
-  const gRot   =parseInt(document.getElementById('waRotate')?.value||0);
+  // ── Global controls ─────────────────────────────────────────────────
+  const lineGap = parseInt(document.getElementById('waLineGap')?.value  || 14);
+  const vOffset = parseInt(document.getElementById('waVOffset')?.value  || 0);
+  const gGlow   = parseInt(document.getElementById('waGlow')?.value     || 0);
+  const gGlowC  = document.getElementById('waGlowC')?.value  || '#ffd700';
+  const gSh     = parseInt(document.getElementById('waShadow')?.value   || 0);
+  const gShC    = document.getElementById('waShC')?.value    || '#000000';
+  const gRot    = parseInt(document.getElementById('waRotate')?.value   || 0);
 
-  const active = waLines.filter(l=>l.text.trim()||l.prefix||l.suffix);
-  if(!active.length){document.getElementById('waPh').style.display='flex';return;}
-  document.getElementById('waPh').style.display='none';
+  // ── Active lines ────────────────────────────────────────────────────
+  const active = waLines.filter(l => (l.text||'').trim() || l.prefix || l.suffix);
+  if (!active.length) {
+    document.getElementById('waPh').style.display = 'flex';
+    return;
+  }
+  document.getElementById('waPh').style.display = 'none';
 
-  // Calc total height
-  let totalH=0;
-  active.forEach((l,i)=>{totalH+=l.size*1.1;if(i<active.length-1)totalH+=lineGap;});
-  let curY=CH/2-totalH/2+active[0].size*0.82+vOffset;
+  // ── Total height for vertical centering ─────────────────────────────
+  let totalH = 0;
+  active.forEach((l,i) => {
+    totalH += Math.max(8, l.size||80) * 1.1;
+    if (i < active.length-1) totalH += lineGap;
+  });
+  let curY = CH/2 - totalH/2 + Math.max(8, active[0].size||80)*0.82 + vOffset;
 
-  if(gRot!==0){ctx.save();ctx.translate(CW/2,CH/2);ctx.rotate(gRot*Math.PI/180);ctx.translate(-CW/2,-CH/2);}
-
-  active.forEach(ld=>{ try {
-    const fs = Math.max(8, ld.size || 80);
-    if (!ld) return;
-    const rawText=(ld.prefix||'')+(applyCase(ld.text,ld.caseMode||'none')||'')+(ld.suffix||'');
-    if(!rawText.trim()) return;
-
-    const ff=FONTS[ld.fontIdx]?.f||'Impact,sans-serif';
-    const bw=ld.bold?'bold ':'';
-    const it=ld.italic?'italic ':'';
-    const fp=it+bw;
-    ctx.font=fp+fs+'px '+ff;
-
-    const effAlign=ld.align==='inherit'?globalAlign:ld.align;
-    const cx=effAlign==='left'?80:effAlign==='right'?CW-80:CW/2;
-    const y=curY+(ld.offsetY||0);
-
-    const lg=ld.glow>0?ld.glow:gGlow;
-    const lgc=ld.glow>0?ld.glowColor:gGlowC;
-    const ls=gSh; const lsc=gShC;
-
+  // ── Global rotation ─────────────────────────────────────────────────
+  if (gRot !== 0) {
     ctx.save();
-    ctx.globalAlpha=ld.opacity||1;
+    ctx.translate(CW/2, CH/2);
+    ctx.rotate(gRot * Math.PI / 180);
+    ctx.translate(-CW/2, -CH/2);
+  }
 
-    // Skew
-    if(ld.skewX!==0){const sk=Math.tan(ld.skewX*Math.PI/180);ctx.transform(1,0,-sk,1,y*sk,0);}
+  // ── Draw each line ───────────────────────────────────────────────────
+  active.forEach(ld => {
+    try {
+      const fs  = Math.max(8, ld.size || 80);
+      const ff  = FONTS[ld.fontIdx]?.f || 'Impact,sans-serif';
+      const fp  = (ld.italic?'italic ':'') + (ld.bold?'bold ':'');
+      const fontStr = fp + fs + 'px ' + ff;
 
-    // Per-line rotation
-    if(ld.rotate!==0){ctx.translate(cx,y);ctx.rotate(ld.rotate*Math.PI/180);ctx.translate(-cx,-y);}
+      const effAlign = (ld.align === 'inherit') ? globalAlign : (ld.align || globalAlign);
+      const cx = effAlign==='left' ? 80 : effAlign==='right' ? CW-80 : CW/2;
+      const y  = curY + (ld.offsetY || 0);
 
-    const effStyle=ld.style==='same'?waSelStyle:ld.style;
-    const tw=ctx.measureText(rawText).width;
-    const tx=effAlign==='center'?cx-tw/2:effAlign==='right'?cx-tw:cx;
+      const lg   = ld.glow  > 0 ? ld.glow  : gGlow;
+      const lgc  = ld.glow  > 0 ? ld.glowColor  : gGlowC;
+      const ls   = ld.shadow > 0 ? ld.shadow : gSh;    // per-line shadow if we add it later
+      const lsc  = gShC;
 
-    // Highlight background
-    if(ld.highlight){
-      ctx.save();ctx.shadowBlur=0;ctx.fillStyle=ld.hlColor||'#ffff00';
-      ctx.fillRect(tx-fs*0.08,y-fs*0.8,tw+fs*0.16,fs*0.98);ctx.restore();
+      const effStyle = (ld.style === 'same') ? waSelStyle : ld.style;
+
+      const rawText = (ld.prefix||'') + applyCase((ld.text||''), ld.caseMode||'none') + (ld.suffix||'');
+      if (!rawText.trim()) { curY += fs*1.1 + lineGap; return; }
+
+      // ── Measure text width (always use line's own font) ──────────────
+      ctx.font = fontStr;
+      const tw = ctx.measureText(rawText).width;
+      const tx = effAlign==='center' ? cx - tw/2
+               : effAlign==='right'  ? cx - tw : cx;
+
+      // ── Per-line opacity + transforms ────────────────────────────────
+      ctx.save();
+      ctx.globalAlpha = ld.opacity != null ? ld.opacity : 1;
+
+      if (ld.skewX) {
+        const sk = Math.tan(ld.skewX * Math.PI / 180);
+        ctx.transform(1, 0, -sk, 1, y*sk, 0);
+      }
+      if (ld.rotate) {
+        ctx.translate(cx, y);
+        ctx.rotate(ld.rotate * Math.PI / 180);
+        ctx.translate(-cx, -y);
+      }
+
+      // ── 1. Highlight (behind text) ───────────────────────────────────
+      if (ld.highlight) {
+        ctx.save();
+        ctx.globalAlpha = (ld.opacity != null ? ld.opacity : 1) * 0.82;
+        ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+        ctx.fillStyle = ld.hlColor || '#ffff00';
+        // Use measured tw/tx — these are correct at this point
+        ctx.fillRect(tx - fs*0.08, y - fs*0.80, tw + fs*0.16, fs*0.96);
+        ctx.restore();
+      }
+
+      // ── 2. Draw text ─────────────────────────────────────────────────
+      // Re-set font (ctx.save/restore may have changed it in highlight above)
+      ctx.font = fontStr;
+
+      if (effStyle === 'dropcap') {
+        // Drop Cap: first char at 1.82x size with full style
+        const dcChar = rawText.charAt(0);
+        const dcRest = rawText.slice(1);
+        const dcFs   = Math.round(fs * 1.82);
+        ctx.font = fp + dcFs + 'px ' + ff;
+        const dcW = ctx.measureText(dcChar).width;
+        ctx.font = fp + fs + 'px ' + ff;
+        const restW = dcRest ? ctx.measureText(dcRest).width : 0;
+        const startX = effAlign==='center' ? cx - (dcW+restW)/2
+                     : effAlign==='right'  ? cx - (dcW+restW) : cx;
+        applyWaStyleFull(ctx, waSelStyle, dcChar, startX+dcW/2,
+          y - (dcFs-fs)*0.28, dcFs, CW,
+          ld.color1, ld.color2, ld.strokeW, ld.strokeColor,
+          0, '#000', lg, lgc, fp);
+        if (dcRest) {
+          ctx.save();
+          ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+          ctx.font = fp + fs + 'px ' + ff;
+          ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+          ctx.fillStyle = ld.color1 || '#ffffff';
+          ctx.fillText(dcRest, startX + dcW*0.98, y);
+          ctx.restore();
+        }
+      } else if (effStyle === 'ribbon') {
+        drawRibbon(ctx, rawText, cx, y, fs, ff, ld.color1);
+      } else if (effStyle === 'dash' || effStyle === 'dash2') {
+        ctx.save();
+        ctx.shadowBlur = 0; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = ld.color1 || '#ffffff';
+        const dashText = '— ' + rawText + ' —';
+        ctx.fillText(dashText, cx, y);
+        const dtw = ctx.measureText(dashText).width;
+        ctx.fillRect(cx - dtw/2, y + fs*0.14, dtw, Math.max(2, fs*0.04));
+        ctx.restore();
+      } else if (effStyle === 'plain') {
+        ctx.save();
+        ctx.shadowBlur = 0; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = ld.color1 || '#ffffff';
+        ctx.fillText(rawText, cx, y);
+        ctx.restore();
+      } else if (effStyle === 'outline2') {
+        ctx.save();
+        ctx.shadowBlur = 0; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        ctx.strokeStyle = ld.color1 || '#ffffff';
+        ctx.lineWidth = Math.max(2, fs*0.04);
+        ctx.lineJoin = 'round';
+        ctx.strokeText(rawText, cx, y);
+        ctx.restore();
+      } else if (ld.arch !== 0) {
+        ctx.shadowBlur = 0;
+        drawArched(ctx, rawText, cx, y, fs, ld.arch, ld.letterGap,
+          fontStr, ld.color1||'#ffffff', ld.color2||'#ffffff',
+          ld.strokeW||0, ld.strokeColor||'#000000', effStyle);
+      } else if (ld.letterGap !== 0) {
+        drawLetterSpaced(ctx, rawText, cx, y, fs, ld.letterGap, ff,
+          ld.color1||'#ffffff', ld.color2||'#ffffff',
+          ld.strokeW||0, ld.strokeColor||'#000000', effStyle, fp);
+      } else if (ld.waveAmp > 0) {
+        ctx.save();
+        ctx.shadowBlur = 0; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+        ctx.font = fontStr;
+        const chs = rawText.split('');
+        const cws = chs.map(ch => ctx.measureText(ch).width);
+        let wx = tx;
+        chs.forEach((ch, ci) => {
+          const wy = y + Math.sin(ci * 0.7) * ld.waveAmp;
+          applyWaStyleFull(ctx, effStyle, ch, wx+cws[ci]/2, wy-fs*0.35, fs, CW,
+            ld.color1||'#ffffff', ld.color2||'#ffffff',
+            ld.strokeW||0, ld.strokeColor||'#000000', ls, lsc, lg, lgc, fp);
+          wx += cws[ci];
+        });
+        ctx.restore();
+      } else {
+        ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        applyWaStyleFull(ctx, effStyle, rawText, cx, y-fs*0.35, fs, CW,
+          ld.color1||'#ffffff', ld.color2||'#ffffff',
+          ld.strokeW||0, ld.strokeColor||'#000000', ls, lsc, lg, lgc, fp);
+      }
+
+      // ── 3. Underline & Strikethrough (always after text) ────────────
+      // Re-set font + reset all canvas state before drawing decorations
+      ctx.font = fontStr;
+      ctx.globalAlpha = ld.opacity != null ? ld.opacity : 1;
+      ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+      ctx.filter = 'none';
+
+      if (ld.underline) {
+        // Re-measure to be 100% sure
+        const ulTw = ctx.measureText(rawText).width;
+        const ulTx = effAlign==='center' ? cx - ulTw/2
+                   : effAlign==='right'  ? cx - ulTw : cx;
+        ctx.fillStyle = ld.color1 || '#ffffff';
+        ctx.fillRect(ulTx, y + fs*0.1, ulTw, Math.max(2, fs*0.055));
+      }
+
+      if (ld.strikethrough) {
+        const stTw = ctx.measureText(rawText).width;
+        const stTx = effAlign==='center' ? cx - stTw/2
+                   : effAlign==='right'  ? cx - stTw : cx;
+        ctx.fillStyle = ld.color1 || '#ffffff';
+        ctx.fillRect(stTx, y - fs*0.30, stTw, Math.max(2, fs*0.055));
+      }
+
+      ctx.restore(); // restore opacity/transform for this line
+
+    } catch(e) {
+      console.warn('Line render error:', e);
     }
 
-    // Wave effect
-    if(ld.waveAmp>0&&effStyle!=='ribbon'&&effStyle!=='dash'){
-      ctx.save();ctx.shadowBlur=0;ctx.textAlign='left';ctx.textBaseline='alphabetic';
-      const chs=rawText.split('');const cws=chs.map(ch=>ctx.measureText(ch).width);
-      let wx=tx;
-      chs.forEach((ch,ci)=>{
-        const wy=y+Math.sin(ci*0.7)*ld.waveAmp;
-        applyWaStyleFull(ctx,effStyle,ch,wx+cws[ci]/2,wy-fs*0.35,fs,CW,(ld.color1||'#ffffff'),(ld.color2||'#ffffff'),(ld.strokeW||0),(ld.strokeColor||'#000000'),ls,lsc,lg,lgc,fp);
-        wx+=cws[ci];
-      });
-      ctx.restore();
-    } else if(effStyle==='ribbon'){
-      drawRibbon(ctx,rawText,cx,y,fs,ff,ld.color1);
-    } else if(effStyle==='dash'||effStyle==='dash2'){
-      ctx.shadowBlur=0;ctx.textAlign='center';ctx.textBaseline='alphabetic';
-      ctx.fillStyle=ld.color1;ctx.fillText('— '+rawText+' —',cx,y);
-      const tw3=ctx.measureText('— '+rawText+' —').width;
-      ctx.fillRect(cx-tw3/2,y+fs*0.16,tw3,Math.max(1,fs*0.035));
-    } else if(effStyle==='plain'){
-      ctx.shadowBlur=0;ctx.textAlign='center';ctx.textBaseline='alphabetic';
-      ctx.fillStyle=ld.color1;ctx.fillText(rawText,cx,y);
-    } else if(effStyle==='outline2'){
-      ctx.textAlign='center';ctx.textBaseline='alphabetic';
-      ctx.strokeStyle=ld.color1;ctx.lineWidth=Math.max(2,fs*0.04);ctx.lineJoin='round';ctx.strokeText(rawText,cx,y);
-    } else if(ld.arch!==0){
-      ctx.shadowBlur=0;
-      drawArched(ctx,rawText,cx,y,fs,ld.arch,ld.letterGap,fp+fs+'px '+ff,(ld.color1||'#ffffff'),(ld.color2||'#ffffff'),(ld.strokeW||0),(ld.strokeColor||'#000000'),effStyle);
-    } else if(ld.letterGap!==0){
-      drawLetterSpaced(ctx,rawText,cx,y,fs,ld.letterGap,ff,(ld.color1||'#ffffff'),(ld.color2||'#ffffff'),(ld.strokeW||0),(ld.strokeColor||'#000000'),effStyle,fp);
-    } else {
-      ctx.textAlign='center';ctx.textBaseline='alphabetic';
-      applyWaStyleFull(ctx,effStyle,rawText,cx,y-fs*0.35,fs,CW,(ld.color1||'#ffffff'),(ld.color2||'#ffffff'),(ld.strokeW||0),(ld.strokeColor||'#000000'),ls,lsc,lg,lgc,fp);
-    }
+    curY += (Math.max(8, ld.size||80)) * 1.1 + lineGap;
+  });
 
-    // Underline
-    if(ld.underline){ctx.save();ctx.shadowBlur=0;ctx.fillStyle=ld.color1;ctx.fillRect(tx,y+fs*0.1,tw,Math.max(2,fs*0.045));ctx.restore();}
-    // Strikethrough
-    if(ld.strikethrough){ctx.save();ctx.shadowBlur=0;ctx.fillStyle=ld.color1;ctx.fillRect(tx,y-fs*0.3,tw,Math.max(2,fs*0.045));ctx.restore();}
+  if (gRot !== 0) ctx.restore();
 
-    ctx.restore();
-    curY+=(Math.max(8,ld.size||80))*1.1+lineGap;
-  } catch(e){ console.warn('Render error for line:',e); curY+=80+lineGap; } });
+  // Watermark
+  ctx.save();
+  ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+  ctx.font = 'bold 15px sans-serif'; ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(200,200,200,0.1)';
+  ctx.fillText('ThumbCraft', CW-18, CH-15);
+  ctx.restore();
 
-  if(gRot!==0) ctx.restore();
-  ctx.shadowBlur=0;ctx.globalAlpha=1;
-  ctx.font='bold 15px sans-serif';ctx.textAlign='right';ctx.fillStyle='rgba(200,200,200,0.1)';
-  ctx.fillText('ThumbCraft',CW-18,CH-15);
-  document.getElementById('waStatus').textContent=CW+'×'+CH+' · '+active.length+' line'+(active.length!==1?'s':'');
+  document.getElementById('waStatus').textContent =
+    CW + '×' + CH + ' · ' + active.length + ' line' + (active.length!==1?'s':'');
 }
 
 function getOff(forJpg, scale) {
